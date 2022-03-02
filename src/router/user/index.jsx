@@ -1,24 +1,18 @@
-import React from 'react'
-import {Switch, Route, BrowserRouter, useLocation, Redirect} from 'react-router-dom';
-import AdminLayout from '../../layout/admin_layout';
-import {UserRouterLocal} from './router'
-import AdminMainRoute from '../admin';
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import { UserRouterLocal } from "./router";
 
 function UserMainRouter() {
-  
 
   return (
     <Switch>
-      {
-        UserRouterLocal?.map((item, key) => {
-          return (
-            <Route exact path={item.path} component={item.component} key = {key} />
-          )
-        })
-      }
-     <AdminLayout path={"/admin"} component ={AdminMainRoute} />
+      {UserRouterLocal?.map((item, key) => {
+        return (
+          <Route exact path={item.path} component={item.component} key={key} />
+        );
+      })}
     </Switch>
   );
 }
 
-export default UserMainRouter
+export default UserMainRouter;

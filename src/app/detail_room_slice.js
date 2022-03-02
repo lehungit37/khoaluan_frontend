@@ -9,6 +9,5 @@ const detailRoomSlice = createSlice({
   extraReducers: {},
 });
 
-export const {} = detailRoomSlice.actions
-;
+export const {} = detailRoomSlice.actions;
 export default detailRoomSlice.reducer;

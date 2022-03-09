@@ -6,6 +6,9 @@ const userApi = {
   getInfo: () => {
     return axiosClient.get("/user/get_info");
   },
+  register: (data) => {
+    return axiosClient.post("/auth/register", data);
+  }
 };
 
 export default userApi;

@@ -3,10 +3,10 @@ export const typography = {
   fontWightLight: 400,
   fontWeightRegular: 500,
   fontWeightMedium: 600,
-  fontWightBold: 700,
+  fontWightBold: 800,
   menu: {
-    fontSize: 14,
+    fontSize: 15,
     lineHight: "1",
-    fontWeight: 500,
-  },
+    fontWeight: 500
+  }
 };

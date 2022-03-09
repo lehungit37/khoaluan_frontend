@@ -6,7 +6,7 @@ import {
   Button,
   Avatar,
   MenuItem,
-  Divider,
+  Divider
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
@@ -39,13 +39,13 @@ function Menu() {
   const history = useHistory();
   const {
     api: {
-      getMenu: { status, categories },
-    },
+      getMenu: { status, categories }
+    }
   } = useSelector((state) => state.menuReducer);
   const {
     api: {
-      getInfo: { me },
-    },
+      getInfo: { me }
+    }
   } = useSelector((state) => state.userReducer);
 
   const token = Cookies.get("token");
@@ -74,29 +74,29 @@ function Menu() {
     {
       title: "Đăng tin cho thuê",
       icon: <AddOutlinedIcon />,
-      path: "/quan-ly/dang-tin-moi",
+      path: "/quan-ly/dang-tin-moi"
     },
     {
       title: "Quản lý tin đăng",
       icon: <ListAltOutlinedIcon />,
-      path: "/quan-ly/tin-dang",
+      path: "/quan-ly/tin-dang"
     },
     {
       title: "Thông tin cá nhân",
-      icon: <AccountCircleOutlinedIcon />,
+      icon: <AccountCircleOutlinedIcon />
     },
     {
       title: "Tin đã lưu",
-      icon: <FavoriteOutlinedIcon />,
-    },
+      icon: <FavoriteOutlinedIcon />
+    }
   ];
 
   const renderMenuItem = () => {
     return (
       <>
-        {accountManagementList?.map((item) => {
+        {accountManagementList?.map((item, key) => {
           return (
-            <MenuItem onClick={() => handleClose(item.path)}>
+            <MenuItem onClick={() => handleClose(item.path)} key={key}>
               {item.icon}
               {item.title}
             </MenuItem>
@@ -203,7 +203,7 @@ function Menu() {
                     <StyledMenu
                       id="demo-customized-menu"
                       MenuListProps={{
-                        "aria-labelledby": "demo-customized-button",
+                        "aria-labelledby": "demo-customized-button"
                       }}
                       anchorEl={anchorEl}
                       open={openModelMenu}
@@ -217,7 +217,7 @@ function Menu() {
                       endIcon={<AddOutlinedIcon />}
                       color="error"
                       variant="contained"
-                      onClick = {() => history.push("/quan-ly/dang-tin-moi")}
+                      onClick={() => history.push("/quan-ly/dang-tin-moi")}
                     >
                       Đăng tin mới
                     </Button>
@@ -242,9 +242,8 @@ function Menu() {
           </Grid>
           {categories?.map((category, key) => {
             return (
-              <Grid item className={classes.navbarItem}>
+              <Grid key={key} item className={classes.navbarItem}>
                 <NavLink
-                  key={key}
                   to={`/${stringToSlug(category.nameCategories)}/${
                     category.id
                   }`}

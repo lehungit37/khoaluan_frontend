@@ -13,6 +13,11 @@ export const getInfo = createAsyncThunk(
   payloadCreator(userApi.getInfo)
 );
 
+export const register = createAsyncThunk(
+  "user/register",
+  payloadCreator(userApi.register)
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -20,14 +25,17 @@ const userSlice = createSlice({
       auth: {
         login: {
           status: "",
-          token: "",
+          token: ""
         },
+        register: {
+          status: ""
+        }
       },
       getInfo: {
         status: "",
-        me: {},
-      },
-    },
+        me: {}
+      }
+    }
   },
   reducer: {},
   extraReducers: {
@@ -56,7 +64,16 @@ const userSlice = createSlice({
       state.api.getInfo.status = "rejected";
       state.api.getInfo.me = {};
     },
-  },
+    [register.pending]: (state, action) => {
+      state.api.auth.register.status = "pending";
+    },
+    [register.fulfilled]: (state, action) => {
+      state.api.auth.register.status = "fulfilled";
+    },
+    [register.rejected]: (state, action) => {
+      state.api.auth.register.status = "rejected";
+    }
+  }
 });
 
 export const {} = userSlice.actions;

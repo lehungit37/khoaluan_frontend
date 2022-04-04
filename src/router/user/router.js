@@ -1,14 +1,11 @@
 import Dashboard from "../../features/user/dashboard";
 import RoomDetail from "../../features/user/detail_room";
+import LienHe from "../../features/user/lienhe";
 import Login from "../../features/user/login";
 import Register from "../../features/user/register";
 
+
 export const UserRouterLocal = [
-  {
-    path: "/",
-    name: "Xem thông tin mới nhất",
-    component: Dashboard,
-  },
   {
     path: "/chi-tiet-phong-tro",
     name: "Chi tiết phòng trọ",
@@ -30,4 +27,15 @@ export const UserRouterLocal = [
     name: "Đăng Ký",
     component: Register,
   },
+  {
+    path: "/",
+    name: "Xem thông tin mới nhất",
+    component: Dashboard,
+  },
+  {
+    path: "/lien-he",
+    name: "liên hệ",
+    component: LienHe,
+  },
+ 
 ];

@@ -23,6 +23,9 @@ const style = () => ({
     color: `${color.WHITE} !important`,
     padding: "10px 20px"
   },
- 
+  header:{
+    padding: "10px 0px",
+    borderBottom: "1px solid #000"
+ }
 });
 export default style;

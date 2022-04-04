@@ -6,10 +6,9 @@ import {
   Button,
   Avatar,
   MenuItem,
-  Divider
+  Divider,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
@@ -39,13 +38,13 @@ function Menu() {
   const history = useHistory();
   const {
     api: {
-      getMenu: { status, categories }
-    }
+      getMenu: { status, categories },
+    },
   } = useSelector((state) => state.menuReducer);
   const {
     api: {
-      getInfo: { me }
-    }
+      getInfo: { me },
+    },
   } = useSelector((state) => state.userReducer);
 
   const token = Cookies.get("token");
@@ -74,12 +73,12 @@ function Menu() {
     {
       title: "Đăng tin cho thuê",
       icon: <AddOutlinedIcon />,
-      path: "/quan-ly/dang-tin-moi"
+      path: "/quan-ly/dang-tin-moi",
     },
     {
       title: "Quản lý tin đăng",
       icon: <ListAltOutlinedIcon />,
-      path: "/quan-ly/tin-dang"
+      path: "/quan-ly/tin-dang",
     },
     {
       title: "Thông tin cá nhân",
@@ -88,8 +87,8 @@ function Menu() {
     },
     {
       title: "Tin đã lưu",
-      icon: <FavoriteOutlinedIcon />
-    }
+      icon: <FavoriteOutlinedIcon />,
+    },
   ];
 
   const renderMenuItem = () => {
@@ -178,7 +177,7 @@ function Menu() {
                     <StyledMenu
                       id="demo-customized-menu"
                       MenuListProps={{
-                        "aria-labelledby": "demo-customized-button"
+                        "aria-labelledby": "demo-customized-button",
                       }}
                       anchorEl={anchorEl}
                       open={openModelMenu}

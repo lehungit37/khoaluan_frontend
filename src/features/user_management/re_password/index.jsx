@@ -12,46 +12,45 @@ import Cookies from "js-cookie";
 
 import style from "./style";
 import FormTextField from "../../../custom_fileds/hook-form/text_field";
-import { getInfo, login } from "../../../app/user_slice";
+import { login } from "../../../app/user_slice";
 import color from "../../../constant/color";
 
 const schema = yup.object({
-  userName: yup.string().required("Vui lòng nhập tên đăng nhập"),
-  password: yup.string().required("Vui lòng nhập mật khẩu"),
+  password: yup.string().required("Vui lòng nhập lại mật khẩu cũ"),
+  newpassword: yup.string().required("Vui lòng nhập mật khẩu mới")
 });
 
 const useStyles = makeStyles(style);
-function Login() {
+function RePassword() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const {
     api: {
       auth: {
-        login: { status },
-      },
-    },
+        login: { status }
+      }
+    }
   } = useSelector((state) => state.userReducer);
   const history = useHistory();
   const {
     control,
     reset,
     handleSubmit,
-    formState: {},
+    formState: {}
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { userName: "", password: "" },
+    defaultValues: {password: "" }
   });
 
   const onSubmit = (data) => {
     dispatch(login(data))
       .unwrap()
       .then((res) => {
-        toast.success("Đăng nhập thành công", {
+        toast.success("Cập nhật mật khẩu thành công", {
           position: "bottom-left",
-          autoClose: 2000,
+          autoClose: 2000
         });
-        Cookies.set("token", res.token, { expires: 2 / 24 });
-        dispatch(getInfo());
+        Cookies.set("token", res.token);
         history.push("/");
       })
       .catch((error) => {
@@ -59,13 +58,16 @@ function Login() {
           error.messages || "Hệ thống đang bảo trì, vui lòng quay lại sau",
           {
             position: "bottom-left",
-            autoClose: 2000,
+            autoClose: 2000
           }
         );
       });
   };
 
   return (
+ <>
+  <Box className = {classes.header}> <Typography variant="h5" >Đổi mật khẩu</Typography></Box>
+
     <Grid
       container
       justifyContent="center"
@@ -81,14 +83,15 @@ function Login() {
         >
           <FormTextField
             control={control}
-            name={"userName"}
-            label="Tên đăng nhập"
+            name={"password"}
+            label="Mật khẩu cũ"
             size="small"
+            type="password"
           />
           <FormTextField
             control={control}
-            name={"password"}
-            label="Mật khẩu"
+            name={"newpassword"}
+            label="Mật khẩu mới"
             size="small"
             type="password"
           />
@@ -100,38 +103,14 @@ function Login() {
               loading={status === "pending"}
               type="submit"
             >
-              Đăng nhập
+              Cập nhật
             </LoadingButton>
           </Box>
         </Box>
-
-        <Grid container justifyContent="space-between" marginTop={2}>
-          <Grid item>
-            <Link
-              component="button"
-              variant="body2"
-              onClick={() => {
-                history.push("/quen-mat-khau");
-              }}
-            >
-              Bạn quên mật khẩu ?
-            </Link>
-          </Grid>
-          <Grid item>
-            <Link
-              component="button"
-              variant="body2"
-              onClick={() => {
-                history.push("/dang-ky");
-              }}
-            >
-              Tạo tài khoản mới
-            </Link>
-          </Grid>
-        </Grid>
       </Grid>
     </Grid>
+    </>
   );
 }
 
-export default Login;
+export default RePassword;

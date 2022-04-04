@@ -4,13 +4,15 @@ const style = () => ({
     display: "flex",
     flexDirection: "column",
     gap: "30px",
-    marginTop: 20
+    marginTop: 20,
+    
   },
   formItem: {
     position: "relative",
     background: color.GRAY,
     padding: "2% 4%",
-    borderRadius: "10px"
+    borderRadius: "10px",
+    width: "100%"
   },
   paper: {
     position: "absolute",
@@ -23,6 +25,9 @@ const style = () => ({
     color: `${color.WHITE} !important`,
     padding: "10px 20px"
   },
- 
+  header:{
+    padding: "10px 0px",
+    borderBottom: "1px solid #000"
+ }
 });
 export default style;

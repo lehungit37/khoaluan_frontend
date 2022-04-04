@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper, Typography, Button, Grid, Link } from "@mui/material";
+import { Box, Paper, Typography, Button, Grid, Link, Step, Stepper,StepLabel, TextareaAutosize } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { makeStyles } from "@mui/styles";
 import * as yup from "yup";
@@ -12,34 +12,35 @@ import Cookies from "js-cookie";
 
 import style from "./style";
 import FormTextField from "../../../custom_fileds/hook-form/text_field";
-import { getInfo, login } from "../../../app/user_slice";
+import { login } from "../../../app/user_slice";
 import color from "../../../constant/color";
 
 const schema = yup.object({
-  userName: yup.string().required("Vui lòng nhập tên đăng nhập"),
-  password: yup.string().required("Vui lòng nhập mật khẩu"),
+ 
+ 
+ 
 });
-
+const steps = ['Nhập số điện thoại', 'Xác thực '];
 const useStyles = makeStyles(style);
-function Login() {
+function LienHe() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const {
     api: {
       auth: {
-        login: { status },
-      },
-    },
+        login: { status }
+      }
+    }
   } = useSelector((state) => state.userReducer);
   const history = useHistory();
   const {
     control,
     reset,
     handleSubmit,
-    formState: {},
+    formState: {}
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { userName: "", password: "" },
+    defaultValues: { userName:"",phoneNumber:"" }
   });
 
   const onSubmit = (data) => {
@@ -48,10 +49,9 @@ function Login() {
       .then((res) => {
         toast.success("Đăng nhập thành công", {
           position: "bottom-left",
-          autoClose: 2000,
+          autoClose: 2000
         });
-        Cookies.set("token", res.token, { expires: 2 / 24 });
-        dispatch(getInfo());
+        Cookies.set("token", res.token);
         history.push("/");
       })
       .catch((error) => {
@@ -59,38 +59,53 @@ function Login() {
           error.messages || "Hệ thống đang bảo trì, vui lòng quay lại sau",
           {
             position: "bottom-left",
-            autoClose: 2000,
+            autoClose: 2000
           }
         );
       });
   };
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      sx={{ paddingTop: "8%" }}
-    >
-      <Grid item md={4} className={classes.formItem}>
+    <>
+    <Box sx={{padding:"15px 10%"}}>
+    <Typography variant="h4">Liên hệ với chúng tôi</Typography>
+    <Grid style={{paddingTop:"20px"}} container spacing={2}>
+    <Grid style={{backgroundColor:"transparent",backgroundImage:"linear-gradient(145deg,#0039e4 0,#04dbf1 100%)",borderRadius:"50px",color:"white",}} item xs={6}>
+      <Box>
+      <Typography variant="h6">Thông tin liên hệ</Typography>
+      <Typography variant="subtitle1">Chúng tôi biết bạn có rất nhiều sự lựa chọn. Nhưng cảm ơn vì đã lựa chọn FastRoom</Typography>
+      <Typography variant="subtitle1">Số điện thoại:</Typography>
+      <Typography variant="subtitle1">Email: </Typography>
+      <Typography variant="subtitle1">Zalo: </Typography>
+      <Typography variant="subtitle1">Địa chỉ: </Typography>
+      </Box>
+      </Grid>
+      <Grid item xs={6}>
+      <Grid item md={8} className={classes.formItem}>
         {/* <Paper className={classes.paper}>Đăng nhập</Paper> */}
         <Box
           className={classes.formBox}
           component="form"
           onSubmit={handleSubmit(onSubmit)}
         >
+          <Typography variant="h6">Liên hệ trực tuyến</Typography>
           <FormTextField
             control={control}
             name={"userName"}
-            label="Tên đăng nhập"
+            label="Họ và tên của bạn"
             size="small"
           />
           <FormTextField
             control={control}
-            name={"password"}
-            label="Mật khẩu"
+            name={"phoneNumber"}
+            label="Số điện thoại"
             size="small"
-            type="password"
+          />
+          <TextareaAutosize
+          // aria-label="minimum height"
+          minRows={3}
+          placeholder="  Nội dung"
+          style={{ width:"100%",backgroundColor:"#f8f8f8"}}
           />
           <Box display={"flex"} justifyContent="center">
             <LoadingButton
@@ -100,38 +115,16 @@ function Login() {
               loading={status === "pending"}
               type="submit"
             >
-              Đăng nhập
+              Gửi Liên Hệ
             </LoadingButton>
           </Box>
         </Box>
-
-        <Grid container justifyContent="space-between" marginTop={2}>
-          <Grid item>
-            <Link
-              component="button"
-              variant="body2"
-              onClick={() => {
-                history.push("/quen-mat-khau");
-              }}
-            >
-              Bạn quên mật khẩu ?
-            </Link>
-          </Grid>
-          <Grid item>
-            <Link
-              component="button"
-              variant="body2"
-              onClick={() => {
-                history.push("/dang-ky");
-              }}
-            >
-              Tạo tài khoản mới
-            </Link>
-          </Grid>
-        </Grid>
+      </Grid>
       </Grid>
     </Grid>
+    </Box>
+    </>
   );
 }
 
-export default Login;
+export default LienHe;

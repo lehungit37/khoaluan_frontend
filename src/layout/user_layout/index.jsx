@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Switch, Route, BrowserRouter, useLocation } from "react-router-dom";
 import Menu from "../../components/user/menu";
-import Dashboard from "../../features/user/dashboard";
+import Dashboard from "../../features/user/home_page";
 import ManagementPost from "../../features/user_management/management_post";
 import { UserRouterLocal } from "../../router/user/router";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ import { setAuthToken } from "../../api/axios_client";
 
 import color from "../../constant/color";
 import { Redirect } from "react-router-dom";
+import Footer from "../../components/user/footer";
 function UserLayout({ component: Component, ...rest }) {
   const dispatch = useDispatch();
   const token = Cookies.get("token");
@@ -23,7 +24,7 @@ function UserLayout({ component: Component, ...rest }) {
   }, [token]);
 
   return (
-    <div >
+    <div>
       <Menu />
       {token && <Redirect from="/login" to="/" />}
       <Route
@@ -34,6 +35,7 @@ function UserLayout({ component: Component, ...rest }) {
           </>
         )}
       />
+      <Footer />
     </div>
   );
 }

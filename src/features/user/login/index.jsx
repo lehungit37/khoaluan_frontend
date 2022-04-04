@@ -17,7 +17,7 @@ import color from "../../../constant/color";
 
 const schema = yup.object({
   userName: yup.string().required("Vui lòng nhập tên đăng nhập"),
-  password: yup.string().required("Vui lòng nhập mật khẩu")
+  password: yup.string().required("Vui lòng nhập mật khẩu"),
 });
 
 const useStyles = makeStyles(style);
@@ -27,19 +27,19 @@ function Login() {
   const {
     api: {
       auth: {
-        login: { status }
-      }
-    }
+        login: { status },
+      },
+    },
   } = useSelector((state) => state.userReducer);
   const history = useHistory();
   const {
     control,
     reset,
     handleSubmit,
-    formState: {}
+    formState: {},
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { userName: "", password: "" }
+    defaultValues: { userName: "", password: "" },
   });
 
   const onSubmit = (data) => {
@@ -48,7 +48,7 @@ function Login() {
       .then((res) => {
         toast.success("Đăng nhập thành công", {
           position: "bottom-left",
-          autoClose: 2000
+          autoClose: 2000,
         });
         Cookies.set("token", res.token);
         history.push("/");
@@ -58,7 +58,7 @@ function Login() {
           error.messages || "Hệ thống đang bảo trì, vui lòng quay lại sau",
           {
             position: "bottom-left",
-            autoClose: 2000
+            autoClose: 2000,
           }
         );
       });
@@ -110,7 +110,7 @@ function Login() {
               component="button"
               variant="body2"
               onClick={() => {
-                console.info("I'm a button.");
+                history.push("/quen-mat-khau");
               }}
             >
               Bạn quên mật khẩu ?

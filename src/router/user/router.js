@@ -1,8 +1,13 @@
-import Dashboard from "../../features/user/dashboard";
+import Dashboard from "../../features/user/home_page";
 import RoomDetail from "../../features/user/detail_room";
+<<<<<<< HEAD
 import LienHe from "../../features/user/lienhe";
+=======
+import ForgetPass from "../../features/user/forget_password";
+>>>>>>> origin
 import Login from "../../features/user/login";
 import Register from "../../features/user/register";
+import Tutorial from "../../features/user/tutorial";
 
 
 export const UserRouterLocal = [
@@ -28,6 +33,7 @@ export const UserRouterLocal = [
     component: Register,
   },
   {
+<<<<<<< HEAD
     path: "/",
     name: "Xem thông tin mới nhất",
     component: Dashboard,
@@ -38,4 +44,15 @@ export const UserRouterLocal = [
     component: LienHe,
   },
  
+=======
+    path: "/quen-mat-khau",
+    name: "Quên mật khẩu",
+    component: ForgetPass,
+  },
+  {
+    path: "/huong-dan",
+    name: "Hướng dẫn",
+    component: Tutorial,
+  },
+>>>>>>> origin
 ];

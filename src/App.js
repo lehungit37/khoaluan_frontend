@@ -11,22 +11,33 @@ import ManagementLayout from "./layout/management_layout";
 import ManagementMainRouter from "./router/management";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "react-loading-skeleton/dist/skeleton.css";
 import Login from "./layout/Login";
 import { createBrowserHistory } from "history";
+import { SkeletonTheme } from "react-loading-skeleton";
+import moment from "moment";
+
+import "moment/locale/vi"; // without this line it didn't work
+moment.locale("vi");
 
 export const history = createBrowserHistory();
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router history={history}>
-        <Switch>
-          <Route path="/dang_nhap" exact component={Login} />
-          <ManagementLayout path="/quan-ly" component={ManagementMainRouter} />
-          <AdminLayout path="/admin" component={AdminMainRouter} />
-          <UserLayout path="/" component={UserMainRouter} />
-        </Switch>
-      </Router>
-      <ToastContainer limit={5} />
+      <SkeletonTheme baseColor="#ccc" highlightColor="#f3f3f3">
+        <Router history={history}>
+          <Switch>
+            <Route path="/dang_nhap" exact component={Login} />
+            <ManagementLayout
+              path="/quan-ly"
+              component={ManagementMainRouter}
+            />
+            <AdminLayout path="/admin" component={AdminMainRouter} />
+            <UserLayout path="/" component={UserMainRouter} />
+          </Switch>
+        </Router>
+        <ToastContainer limit={5} />
+      </SkeletonTheme>
     </ThemeProvider>
   );
 }

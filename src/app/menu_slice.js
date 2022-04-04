@@ -24,9 +24,9 @@ const menuSlice = createSlice({
     api: {
       getMenu: {
         status: "pending",
-        categories: [],
-      },
-    },
+        categories: []
+      }
+    }
   },
   reducer: {},
   extraReducers: {
@@ -40,8 +40,8 @@ const menuSlice = createSlice({
     },
     [getMenu.rejected]: (state, action) => {
       state.api.getMenu.status = "rejected";
-    },
-  },
+    }
+  }
 });
 
 export const {} = menuSlice.actions;

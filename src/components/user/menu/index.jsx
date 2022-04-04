@@ -83,7 +83,8 @@ function Menu() {
     },
     {
       title: "Thông tin cá nhân",
-      icon: <AccountCircleOutlinedIcon />
+      icon: <AccountCircleOutlinedIcon />,
+      path: "/quan-ly/thong-tin-ca-nhan"
     },
     {
       title: "Tin đã lưu",
@@ -125,36 +126,7 @@ function Menu() {
             justifyContent={"flex-end"}
             alignItems="center"
           >
-            {!token ? (
-              <Grid
-                container
-                justifyContent={"flex-end"}
-                spacing={2}
-                alignItems="center"
-              >
-                <Grid item>
-                  <Typography>FastRoom xin chào</Typography>
-                </Grid>
-                <Grid item>
-                  <Button
-                    onClick={() => history.push("/login")}
-                    variant="contained"
-                  >
-                    Đăng nhập
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    endIcon={<AddOutlinedIcon />}
-                    onClick={() => history.push("/login")}
-                    color="error"
-                  >
-                    Đăng tin mới
-                  </Button>
-                </Grid>
-              </Grid>
-            ) : (
+            {token && me.id ? (
               <Link style={{ textDecoration: "none", color: color.BLACK }}>
                 <Grid container spacing={2}>
                   <Grid item>
@@ -165,12 +137,15 @@ function Menu() {
                       <Grid
                         item
                         display="flex"
-                        flexDirection="column"
-                        spacing={2}
+                        // flexDirection="column"
+                        // spacing={2}
+                        onClick={() =>
+                          history.push("/quan-ly/thong-tin-ca-nhan")
+                        }
                       >
                         <Typography
                           variant="p"
-                          sx={{ marginBottom: "5px !important" }}
+                          // sx={{ marginBottom: "5px !important" }}
                         >
                           Xin chào,
                           <Typography
@@ -180,7 +155,7 @@ function Menu() {
                             {me?.name}
                           </Typography>
                         </Typography>
-                        <Typography variant="p">
+                        {/* <Typography variant="p">
                           Số dư:
                           <Typography
                             className={classes.nameUser}
@@ -188,7 +163,7 @@ function Menu() {
                           >
                             {customMoney(me?.money)}
                           </Typography>
-                        </Typography>
+                        </Typography> */}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -224,6 +199,35 @@ function Menu() {
                   </Grid>
                 </Grid>
               </Link>
+            ) : (
+              <Grid
+                container
+                justifyContent={"flex-end"}
+                spacing={2}
+                alignItems="center"
+              >
+                <Grid item>
+                  <Typography>FastRoom xin chào</Typography>
+                </Grid>
+                <Grid item>
+                  <Button
+                    onClick={() => history.push("/login")}
+                    variant="contained"
+                  >
+                    Đăng nhập
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    endIcon={<AddOutlinedIcon />}
+                    onClick={() => history.push("/login")}
+                    color="error"
+                  >
+                    Đăng tin mới
+                  </Button>
+                </Grid>
+              </Grid>
             )}
           </Grid>
         </Grid>

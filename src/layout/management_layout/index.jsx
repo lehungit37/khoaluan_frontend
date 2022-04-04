@@ -1,28 +1,30 @@
-import React, { useEffect } from "react";
-import { Route } from "react-router-dom";
-
-import { Box, Grid } from "@mui/material";
-import Drawer from "@mui/material/Drawer";
+import { Box } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
+import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import Cookies from "js-cookie";
-import MenuManagement from "../../components/user_management/menu";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { Link, Route, Redirect } from "react-router-dom";
 import { setAuthToken } from "../../api/axios_client";
 import { getInfo } from "../../app/user_slice";
+import MenuManagement from "../../components/user_management/menu";
+import ModalController from "./../../custom_fileds/modal_controller/index";
 
 const drawerWidth = 240;
 function ManagementLayout({ component: Component, ...rest }) {
   const token = Cookies.get("token");
+  const { pathname } = useLocation();
+  const {
+    api: {
+      getInfo: { me }
+    }
+  } = useSelector((state) => state.userReducer);
+
+  const modalReducer = useSelector((state) => state.modalReducer);
   const dispatch = useDispatch();
   useEffect(() => {
     if (token) {
@@ -32,6 +34,8 @@ function ManagementLayout({ component: Component, ...rest }) {
   }, [token]);
   return (
     <>
+      {token && me.id && <Redirect from="/login" to={`${pathname}`} />}
+      {!token && !me.id && <Redirect from={`${pathname}`} to={`/login`} />}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar
@@ -40,7 +44,7 @@ function ManagementLayout({ component: Component, ...rest }) {
         >
           <Toolbar>
             <Typography variant="h6" noWrap component="div">
-              FastRoom
+              <Link to="/">Trang chủ</Link>
             </Typography>
           </Toolbar>
         </AppBar>
@@ -70,6 +74,7 @@ function ManagementLayout({ component: Component, ...rest }) {
           />
         </Box>
       </Box>
+      <ModalController modalReducer={modalReducer} />
     </>
   );
 }

@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 
 import style from "./style";
 import FormTextField from "../../../custom_fileds/hook-form/text_field";
-import { login } from "../../../app/user_slice";
+import { getInfo, login } from "../../../app/user_slice";
 import color from "../../../constant/color";
 
 const schema = yup.object({
@@ -50,7 +50,8 @@ function Login() {
           position: "bottom-left",
           autoClose: 2000
         });
-        Cookies.set("token", res.token);
+        Cookies.set("token", res.token, { expires: 2 / 24 });
+        dispatch(getInfo());
         history.push("/");
       })
       .catch((error) => {

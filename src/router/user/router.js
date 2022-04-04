@@ -7,27 +7,27 @@ export const UserRouterLocal = [
   {
     path: "/",
     name: "Xem thông tin mới nhất",
-    component: Dashboard,
+    component: Dashboard
   },
   {
-    path: "/chi-tiet-phong-tro",
+    path: "/chi-tiet-phong-tro/:id",
     name: "Chi tiết phòng trọ",
     component: RoomDetail,
-    isPrivate: false,
+    isPrivate: false
   },
   {
     path: "/:slug/:id",
     name: "Xem thông tin mới nhất",
-    component: Dashboard,
+    component: Dashboard
   },
   {
     path: "/login",
     name: "Đăng nhập",
-    component: Login,
+    component: Login
   },
   {
     path: "/dang-ky",
     name: "Đăng Ký",
-    component: Register,
-  },
+    component: Register
+  }
 ];

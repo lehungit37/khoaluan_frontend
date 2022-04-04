@@ -1,6 +1,7 @@
 import PostManagement from "../../features/user_management/management_post";
 import NewPost from "../../features/user_management/new_post";
 import UserInfoEdit from "../../features/user_management/user_info_edit";
+import UpdatePost from "./../../features/user_management/management_post/component/update_post";
 
 export const ManagementRouteLocal = [
   {
@@ -19,8 +20,8 @@ export const ManagementRouteLocal = [
     component: UserInfoEdit
   },
   {
-    path: "/tin-da-luu",
+    path: "/chinh-sua/:id",
     name: "Quản lý tin đã lưu",
-    component: UserInfoEdit
+    component: UpdatePost
   }
 ];

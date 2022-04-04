@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { Switch, Route, BrowserRouter, useLocation } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  BrowserRouter,
+  useLocation,
+  useParams
+} from "react-router-dom";
 import Menu from "../../components/user/menu";
 import Dashboard from "../../features/user/dashboard";
 import ManagementPost from "../../features/user_management/management_post";
@@ -14,7 +20,12 @@ import { Redirect } from "react-router-dom";
 function UserLayout({ component: Component, ...rest }) {
   const dispatch = useDispatch();
   const token = Cookies.get("token");
-
+  const { pathname } = useLocation();
+  const {
+    api: {
+      getInfo: { me }
+    }
+  } = useSelector((state) => state.userReducer);
   useEffect(() => {
     if (token) {
       setAuthToken(token);
@@ -22,10 +33,13 @@ function UserLayout({ component: Component, ...rest }) {
     }
   }, [token]);
 
+  let path = "";
   return (
-    <div >
+    <div
+      style={{ display: "flex", minHeight: "100vh", flexDirection: "column" }}
+    >
       <Menu />
-      {token && <Redirect from="/login" to="/" />}
+      {token && me && <Redirect from="/login" to={`${pathname}`} />}
       <Route
         {...rest}
         render={(routeProps) => (

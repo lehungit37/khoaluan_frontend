@@ -20,7 +20,9 @@ import { NavLink } from "react-router-dom";
 import style from "./style";
 import { customMoney } from "../../../utils/helper";
 import { useSelector } from "react-redux";
-
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Cookies from "js-cookie";
 const useStyles = makeStyles(style);
 function MenuManagement() {
   const classes = useStyles();
@@ -43,31 +45,41 @@ function MenuManagement() {
     },
 
     {
-      title: "Sửa thông tin cá nhân",
-      icon: <BorderColorOutlinedIcon />,
-      path: "/quan-ly/thong-tin-ca-nhan"
-    },
-    {
-      title: "Tin đã lưu",
-      icon: <BorderColorOutlinedIcon />,
+      title: "Thông tin cá nhân",
+      icon: <AssignmentIndIcon />,
       path: "/quan-ly/thong-tin-ca-nhan"
     }
   ];
 
   const renderMenuList = () => {
-    return menuList.map((menu, index) => {
-      return (
-        <>
-          <NavLink exact to={menu.path}>
-            <ListItem button key={index}>
-              <ListItemIcon>{menu.icon}</ListItemIcon>
-              <ListItemText primary={menu.title} />
-            </ListItem>
-          </NavLink>
-          <Divider />
-        </>
-      );
-    });
+    return (
+      <>
+        {menuList.map((menu, index) => {
+          return (
+            <>
+              <NavLink exact to={menu.path}>
+                <ListItem button key={index}>
+                  <ListItemIcon>{menu.icon}</ListItemIcon>
+                  <ListItemText primary={menu.title} />
+                </ListItem>
+              </NavLink>
+              <Divider />
+            </>
+          );
+        })}
+        <NavLink exact to={"/"}>
+          <ListItem
+            button
+            onClick={() => {
+              Cookies.remove("token");
+            }}
+          >
+            <ListItemIcon>{<LogoutIcon />}</ListItemIcon>
+            <ListItemText primary={"Đăng xuất"} />
+          </ListItem>
+        </NavLink>
+      </>
+    );
   };
 
   return (
@@ -82,12 +94,12 @@ function MenuManagement() {
             <Typography variant="p">{me?.phoneNumber}</Typography>
           </Grid>
         </Grid>
-        <Typography variant="p">
+        {/* <Typography variant="p">
           Số dư:{" "}
           <Typography sx={{ fontWeight: "bold" }} variant="span">
             {customMoney(me?.money)}
           </Typography>
-        </Typography>
+        </Typography> */}
       </Box>
       <Divider />
       <List className={classes.link}>{renderMenuList()}</List>

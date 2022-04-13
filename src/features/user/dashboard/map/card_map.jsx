@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardActions,
@@ -6,16 +6,48 @@ import {
   CardMedia,
   Button,
   Typography,
-  Tooltip
+  Tooltip,
+  IconButton
 } from "@mui/material";
-
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import { customMoney } from "./../../../../utils/helper";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import { changeLikePost } from "../dashboard_slice";
+import { useDispatch } from "react-redux";
 export const CardMap = ({ data }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const [isLike, setIsLike] = useState(data?.favorite);
+
+  const changeFavorite = (status) => {
+    const favoritePostList = localStorage.getItem("favoritePost");
+    let cloneFavorite = favoritePostList?.split(",");
+    if (status) {
+      if (!cloneFavorite) {
+        cloneFavorite = [];
+        cloneFavorite[0] = data.id;
+      } else {
+        cloneFavorite?.push(data.id);
+      }
+    } else {
+      const index = cloneFavorite?.findIndex((item) => item === data.id);
+      cloneFavorite?.splice(index, 1);
+    }
+
+    const payload = { id: data.id, status };
+    dispatch(changeLikePost(payload));
+    setIsLike(status);
+    localStorage.setItem("favoritePost", cloneFavorite);
+  };
+
+  console.log(data);
   return (
-    <Card sx={{ minWidth: 200, maxWidth: 300 }} elevation={0}>
+    <Card
+      sx={{ minWidth: 200, maxWidth: 300, position: "relative" }}
+      elevation={0}
+    >
       <CardMedia
         component="img"
         height="140"
@@ -62,6 +94,22 @@ export const CardMap = ({ data }) => {
           Xem chi tiết
         </Button>
       </CardActions>
+
+      {isLike === true ? (
+        <IconButton
+          onClick={() => changeFavorite(false)}
+          sx={{ position: "absolute", right: "0px", top: "0px" }}
+        >
+          <FavoriteOutlinedIcon color="error" />
+        </IconButton>
+      ) : (
+        <IconButton
+          onClick={() => changeFavorite(true)}
+          sx={{ position: "absolute", right: "0px", top: "0px" }}
+        >
+          <FavoriteBorderOutlinedIcon sx={{ color: "#fff" }} />
+        </IconButton>
+      )}
     </Card>
   );
 };

@@ -17,7 +17,8 @@ import { setAuthToken } from "../../api/axios_client";
 
 import color from "../../constant/color";
 import { Redirect } from "react-router-dom";
-import Footer from "../../components/user/footer";
+
+import Messager from "../../components/support_message";
 function UserLayout({ component: Component, ...rest }) {
   const dispatch = useDispatch();
   const token = Cookies.get("token");
@@ -49,7 +50,8 @@ function UserLayout({ component: Component, ...rest }) {
           </>
         )}
       />
-      <Footer />
+
+      <Messager />
     </div>
   );
 }

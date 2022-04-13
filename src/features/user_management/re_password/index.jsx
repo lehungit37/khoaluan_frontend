@@ -12,12 +12,12 @@ import Cookies from "js-cookie";
 
 import style from "./style";
 import FormTextField from "../../../custom_fileds/hook-form/text_field";
-import { login } from "../../../app/user_slice";
+import { login, changePassword } from "../../../app/user_slice";
 import color from "../../../constant/color";
 
 const schema = yup.object({
-  password: yup.string().required("Vui lòng nhập lại mật khẩu cũ"),
-  newpassword: yup.string().required("Vui lòng nhập mật khẩu mới")
+  currentPassword: yup.string().required("Vui lòng nhập mật khẩu cũ"),
+  newPassword: yup.string().required("Vui lòng nhập mật khẩu mới")
 });
 
 const useStyles = makeStyles(style);
@@ -39,11 +39,11 @@ function RePassword() {
     formState: {}
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {password: "" }
+    defaultValues: { newPassword: "", currentPassword: "" }
   });
 
   const onSubmit = (data) => {
-    dispatch(login(data))
+    dispatch(changePassword(data))
       .unwrap()
       .then((res) => {
         toast.success("Cập nhật mật khẩu thành công", {
@@ -51,7 +51,7 @@ function RePassword() {
           autoClose: 2000
         });
         Cookies.set("token", res.token);
-        history.push("/");
+        history.push("/quan-ly/thong-tin-ca-nhan");
       })
       .catch((error) => {
         toast.error(
@@ -65,50 +65,53 @@ function RePassword() {
   };
 
   return (
- <>
-  <Box className = {classes.header}> <Typography variant="h5" >Đổi mật khẩu</Typography></Box>
+    <>
+      <Box className={classes.header}>
+        {" "}
+        <Typography variant="h5">Đổi mật khẩu</Typography>
+      </Box>
 
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      sx={{ paddingTop: "8%" }}
-    >
-      <Grid item md={4} className={classes.formItem}>
-        {/* <Paper className={classes.paper}>Đăng nhập</Paper> */}
-        <Box
-          className={classes.formBox}
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <FormTextField
-            control={control}
-            name={"password"}
-            label="Mật khẩu cũ"
-            size="small"
-            type="password"
-          />
-          <FormTextField
-            control={control}
-            name={"newpassword"}
-            label="Mật khẩu mới"
-            size="small"
-            type="password"
-          />
-          <Box display={"flex"} justifyContent="center">
-            <LoadingButton
-              variant="contained"
-              onSubmit={handleSubmit(onSubmit)}
-              onClick={handleSubmit(onSubmit)}
-              loading={status === "pending"}
-              type="submit"
-            >
-              Cập nhật
-            </LoadingButton>
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ paddingTop: "8%" }}
+      >
+        <Grid item md={4} className={classes.formItem}>
+          {/* <Paper className={classes.paper}>Đăng nhập</Paper> */}
+          <Box
+            className={classes.formBox}
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <FormTextField
+              control={control}
+              name={"currentPassword"}
+              label="Mật khẩu cũ"
+              size="small"
+              type="password"
+            />
+            <FormTextField
+              control={control}
+              name={"newPassword"}
+              label="Mật khẩu mới"
+              size="small"
+              type="password"
+            />
+            <Box display={"flex"} justifyContent="center">
+              <LoadingButton
+                variant="contained"
+                onSubmit={handleSubmit(onSubmit)}
+                onClick={handleSubmit(onSubmit)}
+                loading={status === "pending"}
+                type="submit"
+              >
+                Cập nhật
+              </LoadingButton>
+            </Box>
           </Box>
-        </Box>
+        </Grid>
       </Grid>
-    </Grid>
     </>
   );
 }

@@ -5,11 +5,8 @@
   "dependencies": {
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
-<<<<<<< HEAD
     "@fontsource/roboto": "^4.5.3",
-=======
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
->>>>>>> origin
     "@hookform/resolvers": "^2.8.8",
     "@mui/icons-material": "^5.4.2",
     "@mui/lab": "^5.0.0-alpha.71",
@@ -36,6 +33,7 @@
     "react-loading-skeleton": "^3.0.3",
     "react-map-gl": "^7.0.10",
     "react-mapbox-gl": "^5.1.1",
+    "react-messenger-customer-chat": "^0.8.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",

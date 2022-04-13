@@ -80,7 +80,7 @@ const Slide = (props) => {
         <div ref={refCallback} className="keen-slider">
           {imagesLink?.map((image, index) => (
             <div
-              style={{ width: "100%", height: "250px" }}
+              style={{ width: "100%", height: "350px" }}
               key={index}
               class="keen-slider__slide"
             >

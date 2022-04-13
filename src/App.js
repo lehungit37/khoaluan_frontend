@@ -27,7 +27,6 @@ function App() {
       <SkeletonTheme baseColor="#ccc" highlightColor="#f3f3f3">
         <Router history={history}>
           <Switch>
-            <Route path="/dang_nhap" exact component={Login} />
             <ManagementLayout
               path="/quan-ly"
               component={ManagementMainRouter}

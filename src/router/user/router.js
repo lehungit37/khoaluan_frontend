@@ -1,4 +1,4 @@
-import Dashboard from "../../features/user/home_page";
+import Dashboard from "../../features/user/dashboard";
 import RoomDetail from "../../features/user/detail_room";
 import LienHe from "../../features/user/lienhe";
 import ForgetPass from "../../features/user/forget_password";
@@ -34,12 +34,6 @@ export const UserRouterLocal = [
     name: "Đăng Ký",
 
     component: Register
-  },
-
-  {
-    path: "/",
-    name: "Xem thông tin mới nhất",
-    component: Dashboard,
   },
   {
     path: "/lien-he",

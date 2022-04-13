@@ -9,13 +9,13 @@ const modalSlice = createSlice({
   reducers: {
     openModal: (state, action) => {
       state.open = true;
-      state.dialogProps = action.payload?.dialogProps;
-      state.dialogType = action.payload?.dialogType;
+      state.dialogProps = action.payload.dialogProps;
+      state.dialogType = action.payload.dialogType;
     },
     closeModal: (state, action) => {
       state.open = false;
-      state.dialogProps = action.payload?.dialogProps;
-      state.dialogType = action.payload?.dialogType;
+      state.dialogProps = null;
+      state.dialogType = null;
     }
   }
 });

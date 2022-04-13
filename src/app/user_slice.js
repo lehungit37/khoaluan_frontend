@@ -18,6 +18,25 @@ export const register = createAsyncThunk(
   payloadCreator(userApi.register)
 );
 
+export const changePassword = createAsyncThunk(
+  "user/changePassword",
+  payloadCreator(userApi.changePassword)
+);
+
+export const changeAvatar = createAsyncThunk(
+  "user/changeAvatar",
+  payloadCreator(userApi.changeAvatar)
+);
+
+export const forgetPassword = createAsyncThunk(
+  "user/forgetPassword",
+  payloadCreator(userApi.forgetPassword)
+);
+
+export const updateUser = createAsyncThunk(
+  "user/updateInfo",
+  payloadCreator(userApi.changeInfoUser)
+);
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -35,6 +54,17 @@ const userSlice = createSlice({
         status: "",
         me: {}
       }
+    },
+
+    loading: {
+      changePassword: false,
+      changeAvatar: false,
+      forgetPassword: false,
+      updateUser: false
+    },
+
+    rejected: {
+      forgetPassword: false
     }
   },
   reducer: {},
@@ -72,6 +102,52 @@ const userSlice = createSlice({
     },
     [register.rejected]: (state, action) => {
       state.api.auth.register.status = "rejected";
+    },
+    [changePassword.pending]: (state, action) => {
+      state.loading.changePassword = true;
+    },
+    [changePassword.fulfilled]: (state, action) => {
+      const { token } = action.payload;
+      setAuthToken(token);
+      state.loading.changePassword = false;
+    },
+    [changePassword.rejected]: (state, action) => {
+      state.loading.changePassword = false;
+    },
+    [changeAvatar.pending]: (state) => {
+      state.loading.changeAvatar = true;
+    },
+    [changeAvatar.fulfilled]: (state, action) => {
+      const { imageUrl } = action.payload;
+
+      state.api.getInfo.me.imageUrl = imageUrl;
+      state.loading.changeAvatar = false;
+    },
+    [changeAvatar.rejected]: (state) => {
+      state.loading.changeAvatar = false;
+    },
+    [forgetPassword.pending]: (state) => {
+      state.loading.forgetPassword = true;
+      state.rejected.forgetPassword = false;
+    },
+    [forgetPassword.fulfilled]: (state) => {
+      state.loading.forgetPassword = false;
+    },
+    [forgetPassword.rejected]: (state) => {
+      state.loading.forgetPassword = false;
+      state.rejected.forgetPassword = true;
+    },
+
+    [updateUser.pending]: (state) => {
+      state.loading.updateUser = true;
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      const user = action.meta.arg.user;
+      state.api.getInfo.me = user;
+      state.loading.updateUser = false;
+    },
+    [updateUser.rejected]: (state) => {
+      state.loading.updateUser = false;
     }
   }
 });

@@ -1,6 +1,16 @@
-import React from "react";
-import { Box, Paper, Typography, Button, Grid, Link,IconButton, Stack } from "@mui/material";
-import { PhotoCamera } from "@mui/icons-material"; 
+import React, { useMemo, useEffect } from "react";
+import {
+  Box,
+  Paper,
+  Typography,
+  Button,
+  Grid,
+  Link,
+  IconButton,
+  Stack,
+  Avatar
+} from "@mui/material";
+import { PhotoCamera } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { makeStyles, styled } from "@mui/styles";
 import * as yup from "yup";
@@ -10,16 +20,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
-
 import style from "./style";
 import FormTextField from "../../../custom_fileds/hook-form/text_field";
-import { login } from "../../../app/user_slice";
+import { changeAvatar, login } from "../../../app/user_slice";
 import color from "../../../constant/color";
+import { openModal } from "../../../app/modal_slice";
+import ModalChangePassword from "./component/modal_change_password";
+import { uploadSimpleImage } from "../../../app/image";
+import { updateUser } from "./../../../app/user_slice";
 
 const schema = yup.object({
-  id: yup.string(),
-  // password: yup.string().required("Vui lòng nhập mật khẩu")
- 
+  name: yup.string().required("Vui lòng nhập tên hiển thị")
+});
+
+const Input = styled("input")({
+  display: "none"
 });
 
 const useStyles = makeStyles(style);
@@ -30,30 +45,35 @@ function UserInfoEdit() {
     api: {
       auth: {
         login: { status }
-      }
-    }
+      },
+      getInfo: { me }
+    },
+    loading
   } = useSelector((state) => state.userReducer);
+
+  const defaultValues = useMemo(() => me, [me]);
   const history = useHistory();
   const {
     control,
     reset,
     handleSubmit,
-    formState: {}
+    formState: { isDirty }
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { id: "", phoneNumber: "", name:"",email:"",facebook:"",password:"",imgUrl:"", }
+    defaultValues: defaultValues
   });
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues]);
 
   const onSubmit = (data) => {
-    dispatch(login(data))
+    dispatch(updateUser({ user: data, id: me.id }))
       .unwrap()
-      .then((res) => {
-        toast.success("Đăng nhập thành công", {
+      .then(() => {
+        toast.success("Cập nhật thông tin thành công", {
           position: "bottom-left",
           autoClose: 2000
         });
-        Cookies.set("token", res.token);
-        history.push("/");
       })
       .catch((error) => {
         toast.error(
@@ -65,126 +85,186 @@ function UserInfoEdit() {
         );
       });
   };
-  const Input = styled('input')({
-    display: 'none',
+  const Input = styled("input")({
+    display: "none"
   });
-  
+
+  const handleOpenModalChangePassword = () => {
+    dispatch(
+      openModal({
+        dialogProps: {},
+        dialogType: ModalChangePassword
+      })
+    );
+  };
+
+  const handleChangeAvatar = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    dispatch(uploadSimpleImage(formData))
+      .unwrap()
+      .then((data) => {
+        const imageUrl = data.url;
+
+        dispatch(changeAvatar(imageUrl))
+          .unwrap()
+          .then(() => {
+            toast.success("Cập nhật ảnh thành công", {
+              position: "bottom-left",
+              autoClose: 2000
+            });
+          })
+          .catch((error) => {
+            toast.error(error.messages, {
+              position: "bottom-left",
+              autoClose: 2000
+            });
+          });
+      })
+      .catch((error) => {
+        toast.error("Cập nhật ảnh thất bại", {
+          position: "bottom-left",
+          autoClose: 2000
+        });
+      });
+  };
 
   return (
-    <>
-   <Box className = {classes.header}> <Typography variant="h5" >Cập nhập thông tin cá nhân</Typography></Box>
+    <Box>
+      <Box className={classes.header}>
+        <Typography variant="h5">Hồ sơ của tôi</Typography>
+        <Typography variant="p">
+          Quản lý thông tin hồ sơ để bảo mật tài khoản
+        </Typography>
+      </Box>
 
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      sx={{ paddingTop: "8%" }}
-    >
-      <Grid item md={4} className={classes.formItem}>
-        {/* <Paper className={classes.paper}>Đăng nhập</Paper> */}
-        <Box
-          className={classes.formBox}
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        spacing={3}
+        padding={"20px 0px"}
+      >
+        <Grid item md={9}>
+          <Box
+            component="form"
+            sx={{ display: "flex", flexDirection: "column", rowGap: 4 }}
+          >
+            <Grid container columnSpacing={3}>
+              <Grid item md={3}>
+                <Typography align="right">Tên đăng nhập</Typography>
+              </Grid>
+              <Grid item md={9}>
+                <Typography>{me.userName}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container columnSpacing={3}>
+              <Grid item md={3}>
+                <Typography align="right">Mật khẩu</Typography>
+              </Grid>
+              <Grid item md={9}>
+                <Button
+                  onClick={handleOpenModalChangePassword}
+                  variant="contained"
+                >
+                  Thay đổi mật khẩu
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid container columnSpacing={3}>
+              <Grid item md={3}>
+                <Typography align="right">Email</Typography>
+              </Grid>
+              <Grid item md={9}>
+                <Typography>{me?.email}</Typography>
+              </Grid>
+            </Grid>
+
+            <Grid container columnSpacing={3}>
+              <Grid item md={3}>
+                <Typography align="right">Số điện thoại</Typography>
+              </Grid>
+              <Grid item md={9}>
+                <Typography variant="h6">{me?.phoneNumber}</Typography>
+                <Button variant="contained">Thay đổi số điện thoại</Button>
+              </Grid>
+            </Grid>
+            <Grid container columnSpacing={3}>
+              <Grid item md={3}>
+                <Typography align="right"> Tên hiển thị</Typography>
+              </Grid>
+              <Grid item md={9}>
+                <FormTextField
+                  size="small"
+                  control={control}
+                  label=""
+                  name="name"
+                />
+              </Grid>
+            </Grid>
+
+            <Grid container sx={{ width: "100%" }} justifyContent="center">
+              <Grid item>
+                <LoadingButton
+                  onClick={handleSubmit(onSubmit)}
+                  color="success"
+                  variant="contained"
+                  disabled={!isDirty}
+                  loading={loading.updateUser}
+                >
+                  Lưu thay đổi
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+        <Grid
+          item
+          md={3}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center"
+          }}
         >
-          <FormTextField
-            control={control}
-            name={"id"}
-            label="id"
-            size="small"
-            disabled={true}
-          />
-          <Box>
-          <FormTextField
-            control={control}
-            name={"phoneNumber"}
-            label="Số điện thoại"
-            size="small"
-          />
-          <Button
-              onClick={() => {
-                history.push("/quan-ly/doi-so-dien-thoai");
-              }}
-            >
-              đổi số điện thoại
-            </Button>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "15px"
+            }}
+          >
+            <Avatar
+              alt="Remy Sharp"
+              src={me?.imageUrl}
+              sx={{ width: "150px", height: "150px" }}
+            />
           </Box>
-
-          <FormTextField
-            control={control}
-            name={"name"}
-            label="Tên hiển thị"
-            size="small"
-          />
-          <FormTextField
-            control={control}
-            name={"email"}
-            label="Email"
-            size="small"
-          />
-          <FormTextField
-            control={control}
-            name={"phoneNumber"}
-            label="Số Zalo"
-            size="small"
-          />
-          <FormTextField
-            control={control}
-            name={"facebook"}
-            label="Facebook"
-            size="small"
-          />
-         <Button
-              onClick={() => {
-                history.push("/quan-ly/doi-mat-khau");
-              }}
+          <label htmlFor="contained-button-file">
+            <Input
+              onChange={handleChangeAvatar}
+              accept="image/*"
+              id="contained-button-file"
+              type="file"
+            />
+            <Box
+              sx={{ width: "100%", display: "flex", justifyContent: "center" }}
             >
-              đổi mật khẩu 
-            </Button>
-        <Box sx={{display:"flex", justifyContent:"center"}}>
-
-        <Box sx={{  borderRadius:"100%",overflow:"hidden",height: "150px", width: "150px" }}>
-         <img style={{width:"100%",height:"100%",}} src="https://pbs.twimg.com/profile_images/1483493069752258566/Ft0W9FvR_400x400.jpg" alt="" />
-        </Box>
-        </Box>
-        <Box sx={{display:"flex", justifyContent:"center"}}>
-        <Box>
-        <label htmlFor="contained-button-file">
-        <Input accept="image/*" id="contained-button-file" multiple type="file" />
-        <Button variant="contained" component="span">
-        Upload
-        </Button>
-        </label>
-        <label htmlFor="icon-button-file">
-        <Input accept="image/*" id="icon-button-file" type="file" />
-        {/* <IconButton color="primary" aria-label="upload picture" component="span">
-        <PhotoCamera />
-        </IconButton> */}
-        </label>
-        </Box>
-        </Box>
-
-          <Box display={"flex"} justifyContent="center">
-            <LoadingButton
-              variant="contained"
-              onSubmit={handleSubmit(onSubmit)}
-              onClick={handleSubmit(onSubmit)}
-              loading={status === "pending"}
-              type="submit"
-            >
-              Lưu & cập nhật
-            </LoadingButton>
-          </Box>
-        </Box>
-
-        <Grid container justifyContent="space-between" marginTop={2}>
-          <Grid item>
-           
-          </Grid>
+              <Button
+                sx={{ margin: "0 auto", textAlign: "center" }}
+                variant="contained"
+                component="span"
+              >
+                Chọn ảnh
+              </Button>
+            </Box>
+          </label>
         </Grid>
       </Grid>
-    </Grid>
-    </>
+    </Box>
   );
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Paper, Typography, Button, Grid, Link } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { makeStyles } from "@mui/styles";
@@ -14,32 +14,36 @@ import style from "./style";
 import FormTextField from "../../../custom_fileds/hook-form/text_field";
 import { getInfo, login } from "../../../app/user_slice";
 import color from "../../../constant/color";
+import { openModal } from "../../../app/modal_slice";
+import ModalForgetPassword from "./component/modal_forget_password";
+import { truncate } from "lodash";
 
 const schema = yup.object({
   userName: yup.string().required("Vui lòng nhập tên đăng nhập"),
-  password: yup.string().required("Vui lòng nhập mật khẩu"),
+  password: yup.string().required("Vui lòng nhập mật khẩu")
 });
 
 const useStyles = makeStyles(style);
 function Login() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState(false);
   const {
     api: {
       auth: {
-        login: { status },
-      },
-    },
+        login: { status }
+      }
+    }
   } = useSelector((state) => state.userReducer);
   const history = useHistory();
   const {
     control,
     reset,
     handleSubmit,
-    formState: {},
+    formState: {}
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { userName: "", password: "" },
+    defaultValues: { userName: "", password: "" }
   });
 
   const onSubmit = (data) => {
@@ -48,7 +52,7 @@ function Login() {
       .then((res) => {
         toast.success("Đăng nhập thành công", {
           position: "bottom-left",
-          autoClose: 2000,
+          autoClose: 2000
         });
         Cookies.set("token", res.token, { expires: 2 / 24 });
         dispatch(getInfo());
@@ -59,10 +63,14 @@ function Login() {
           error.messages || "Hệ thống đang bảo trì, vui lòng quay lại sau",
           {
             position: "bottom-left",
-            autoClose: 2000,
+            autoClose: 2000
           }
         );
       });
+  };
+
+  const handleOpenModalForgetPassword = () => {
+    setOpenModal(true);
   };
 
   return (
@@ -110,9 +118,7 @@ function Login() {
             <Link
               component="button"
               variant="body2"
-              onClick={() => {
-                history.push("/quen-mat-khau");
-              }}
+              onClick={handleOpenModalForgetPassword}
             >
               Bạn quên mật khẩu ?
             </Link>
@@ -130,6 +136,8 @@ function Login() {
           </Grid>
         </Grid>
       </Grid>
+
+      <ModalForgetPassword open={openModal} setOpen={setOpenModal} />
     </Grid>
   );
 }

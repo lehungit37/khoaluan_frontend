@@ -49,6 +49,8 @@ const postSlice = createSlice({
       deletePost: false,
       updatePost: false
     },
+    lastestPost: [],
+    relatedPost: [],
     reject: {
       getInfo: false,
       getPostByUser: false
@@ -65,10 +67,13 @@ const postSlice = createSlice({
       state.reject.getInfo = false;
     },
     [getInfoPost.fulfilled]: (state, action) => {
-      const { infoPost, infoAuthPost } = action.payload;
+      const { infoPost, infoAuthPost, lastestPost, relatedPost } =
+        action.payload;
       state.infoPost = infoPost;
       state.infoAuthorPost = infoAuthPost;
       state.loading.getInfo = false;
+      state.lastestPost = lastestPost;
+      state.relatedPost = relatedPost;
       state.reject.getInfo = false;
     },
     [getInfoPost.rejected]: (state) => {

@@ -98,7 +98,7 @@ function RoomDetail() {
                   gap: "5px"
                 }}
               >
-                <AttachMoneyIcon color="error" size="small" />
+                <AttachMoneyIcon color="error" size="small" sx={{"@media(max-width: 768px)": {}}} />
                 <Typography
                   sx={{ fontWeight: "bold" }}
                   color="red"
@@ -116,9 +116,7 @@ function RoomDetail() {
                 }}
               >
                 <AccessTimeIcon />
-                <Typography>
-                  {moment(infoPost.createdAt).startOf("hour").fromNow()}
-                </Typography>
+                <Typography>{moment(infoPost?.createdAt).fromNow()}</Typography>
               </Grid>
             </Grid>
 
@@ -181,7 +179,7 @@ function RoomDetail() {
               <Typography sx={{ marginBottom: "10px" }}>
                 Địa chỉ: {infoPost.address}
               </Typography>
-              <Box>
+              <Box sx={{ height: "350px" }}>
                 <PostMap rootLocation={infoPost.rootLocation} />
               </Box>
             </Box>

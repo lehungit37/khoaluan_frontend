@@ -364,7 +364,15 @@ function NewPost() {
             </Box>
           </form>
         </Grid>
-        <Grid item md={5} sx={{ paddingTop: "40px !important" }}>
+        <Grid
+          item
+          md={5}
+          sx={{
+            paddingTop: "40px !important",
+            display: "flex",
+            flexDirection: "column"
+          }}
+        >
           <PostMap rootLocation={rootLocation} />
           <Box sx={{ marginTop: "20px" }}>
             <Alert severity="info">

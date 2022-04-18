@@ -1,28 +1,68 @@
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Backdrop, Box, Button, CircularProgress, Fab } from "@mui/material";
-
+import {
+  GoogleMap,
+  InfoWindow,
+  Marker,
+  useJsApiLoader,
+  useGoogleMap
+} from "@react-google-maps/api";
 import "mapbox-gl/dist/mapbox-gl.css";
-import React, { useEffect, useRef, useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import ReactMapboxGl, { Marker, Popup, Layer, Feature } from "react-mapbox-gl";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
+
+import Images from "../../../../constant/images";
 import { CardMap } from "./card_map";
-import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
-import PublicIcon from "@mui/icons-material/Public";
-import PublicOffIcon from "@mui/icons-material/PublicOff";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import MyLocationIcon from "@mui/icons-material/MyLocation";
-import axios from "axios";
-import { LoadingButton } from "@mui/lab/LoadingButton";
-const Map = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1IjoiaHVuZ2xlMzciLCJhIjoiY2wxNjdhZXRuMHI3ZTNic2drdzBndHRjeCJ9.DbPMIjnvs7fhmLnyIIBVSg"
-});
+
+const containerStyle = {
+  width: "100%",
+  flex: 1
+};
+
+const mapStyle = [
+  {
+    featureType: "administrative",
+    elementType: "geometry",
+    stylers: [
+      {
+        visibility: "off"
+      }
+    ]
+  },
+  {
+    featureType: "poi",
+    stylers: [
+      {
+        visibility: "off"
+      }
+    ]
+  },
+  {
+    featureType: "road",
+    elementType: "labels.icon",
+    stylers: [
+      {
+        visibility: "off"
+      }
+    ]
+  },
+  {
+    featureType: "transit",
+    stylers: [
+      {
+        visibility: "off"
+      }
+    ]
+  }
+];
 
 function MapPost(props) {
   const { rootLocation, myLocation } = props;
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyD4IU5fZNo62r2eMFZsTI2ZGY3ni6OhqLk"
+  });
   const mapRef = useRef();
+
   const [myRootLocation, setMyRootLocation] = useState({
     lat: 16.054407,
     lng: 108.202164
@@ -33,11 +73,8 @@ function MapPost(props) {
   });
 
   const [popup, setPopup] = useState(null);
+  const [infoMarker, setInfoMarker] = useState({});
 
-  const [darkmode, setDarkmode] = useState(false);
-
-  const [satellite, setSatellite] = useState(false);
-  const [zoomMap, setZoomMap] = useState(14);
   const { loading, postData } = useSelector((state) => state.dashboardReducer);
   useEffect(() => {
     let unmount = false;
@@ -52,6 +89,12 @@ function MapPost(props) {
     };
   }, [myLocation]);
 
+  const options = {
+    minZoom: 10,
+    maxZoom: 18,
+    styles: mapStyle
+  };
+
   const handleOpenPopup = (item) => {
     setPopup(item);
     setCenterLocation({
@@ -59,149 +102,76 @@ function MapPost(props) {
       lat: parseFloat(item.rootLocation?.split(",")?.[0])
     });
   };
-
+  const onUnmount = React.useCallback(function callback(map) {}, []);
   const renderMarkerPost = () => {
     return postData?.map((postItem) => {
       const arrLocation = postItem?.rootLocation?.split(",");
       return (
         <Marker
-          onClick={() => handleOpenPopup(postItem)}
-          coordinates={[parseFloat(arrLocation?.[1]), arrLocation?.[0]]}
-          anchor="bottom"
-        >
-          <HomeWorkIcon color="error" fontSize="medium" />
-        </Marker>
+          icon={{
+            url: Images.MAP_ICON,
+            scaledSize: new window.google.maps.Size(40, 50)
+          }}
+          position={{
+            lng: parseFloat(arrLocation?.[1]),
+            lat: parseFloat(arrLocation?.[0])
+          }}
+          // icon={Images.HOME_ICON}
+          onClick={(e) => {
+            setPopup({
+              lng: parseFloat(arrLocation?.[1]),
+              lat: parseFloat(arrLocation?.[0])
+            });
+
+            setInfoMarker(postItem);
+          }}
+        />
       );
     });
   };
 
-  return (
-    <div
-      style={{
-        flex: 1,
-        position: "relative"
-      }}
-    >
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          display: "flex",
-          gap: 1,
-          flexDirection: "column",
-          right: 0,
-          zIndex: 5,
-          mr: 2,
-          mt: 2
-        }}
-      >
-        <Fab
-          size="small"
-          color="primary"
-          onClick={() => setDarkmode((prev) => !prev)}
-          aria-label="add"
-        >
-          {darkmode ? (
-            <WbSunnyOutlinedIcon color="#ff" fontSize="medium" />
-          ) : (
-            <BedtimeOutlinedIcon color="#ff" fontSize="medium" />
-          )}
-        </Fab>
+  const apiIsLoaded = (map, maps, lat, lng) => {
+    if (map) {
+      const latLng = maps.LatLng(lat, lng); // Makes a latlng
+      map.panTo(latLng);
+    }
+  };
 
-        <Fab
-          size="small"
-          color="primary"
-          onClick={() => setSatellite((prev) => !prev)}
-          aria-label="add"
-        >
-          {!satellite ? (
-            <PublicIcon color="#ff" fontSize="medium" />
-          ) : (
-            <PublicOffIcon color="#ff" fontSize="medium" />
-          )}
-        </Fab>
-        <Fab
-          size="small"
-          color="primary"
-          onClick={() => {
-            setCenterLocation(myLocation);
+  return isLoaded ? (
+    <GoogleMap
+      ref={mapRef}
+      mapContainerStyle={containerStyle}
+      center={centerLocation}
+      zoom={15}
+      // onLoad={onLoad}
+      // onUnmount={onUnmount}
+      options={options}
+      onGoogleApiLoaded={({ map, maps }) =>
+        apiIsLoaded(map, maps, props.lat, props.lng)
+      }
+      onClick={() => setPopup(null)}
+    >
+      {renderMarkerPost()}
+
+      {/* <Marker
+        position={{
+          lng: myLocation?.lng,
+          lat: myLocation?.lat
+        }}
+      /> */}
+      {popup && (
+        <InfoWindow
+          onCloseClick={(e) => {
             setPopup(null);
           }}
-          aria-label="add"
+          position={popup}
         >
-          <MyLocationIcon color="#fff" fontSize="medium" />
-        </Fab>
-      </Box>
-
-      <Backdrop
-        sx={{
-          position: "absolute",
-          color: "#fff",
-          zIndex: (theme) => theme.zIndex.drawer + 1
-        }}
-        open={loading.getData}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-
-      <Map
-        onDrag={(e) => {
-          setZoomMap(e.getZoom());
-
-          setCenterLocation({
-            lat: e.getCenter().lat,
-            lng: e.getCenter().lng
-          });
-        }}
-        movingMethod="easeTo"
-        style={`mapbox://styles/mapbox/${
-          satellite ? "satellite-v9" : darkmode ? "dark-v9" : "streets-v9"
-        }`}
-        containerStyle={{
-          height: "100%",
-          width: "100%"
-        }}
-        onClick={(map, e) => {
-          setPopup(null);
-
-          axios
-            .get(
-              `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&featureTypes=&location=${e.lngLat.lng},${e.lngLat.lat}`
-            )
-            .then((res) => console.log(res.data));
-        }}
-        center={[centerLocation.lng, centerLocation.lat]}
-        zoom={[zoomMap]}
-      >
-        {popup && (
-          <Popup
-            style={{
-              zIndex: 1000
-            }}
-            coordinates={[
-              parseFloat(popup.rootLocation?.split(",")?.[1]),
-              parseFloat(popup.rootLocation?.split(",")?.[0])
-            ]}
-            offset={{
-              "bottom-left": [12, -38],
-              bottom: [0, -38],
-              "bottom-right": [-12, -38]
-            }}
-            anchor="left"
-          >
-            <CardMap data={popup} />
-          </Popup>
-        )}
-        <Marker
-          coordinates={[myRootLocation.lng, myRootLocation.lat]}
-          anchor="bottom"
-        >
-          <LocationOnIcon color="primary" fontSize="large" />
-        </Marker>
-
-        {renderMarkerPost()}
-      </Map>
-    </div>
+          <CardMap data={infoMarker} />
+        </InfoWindow>
+      )}
+    </GoogleMap>
+  ) : (
+    <></>
   );
 }
 

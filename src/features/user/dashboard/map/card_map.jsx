@@ -52,40 +52,40 @@ export const CardMap = ({ data }) => {
         component="img"
         height="140"
         sx={{ objectFit: "cover" }}
-        image={data.imagePost}
+        image={data?.imagePost}
         alt="green iguana"
       />
       <CardContent>
-        <Tooltip title={data.title} arrow placement="top">
+        <Tooltip title={data?.title} arrow placement="top">
           <Typography noWrap gutterBottom variant="h6" component="h3">
-            {data.title}
+            {data?.title}
           </Typography>
         </Tooltip>
-        <Tooltip title={data.address} arrow placement="top">
+        <Tooltip title={data?.address} arrow placement="top">
           <Typography
             gutterBottom
             noWrap
             variant="body1"
             color="text.secondary"
           >
-            Địa chỉ: {data.address}
+            Địa chỉ: {data?.address}
           </Typography>
         </Tooltip>
         <Typography gutterBottom noWrap variant="body1" color="text.secondary">
-          Liên hệ: {data.infoConnect}
+          Liên hệ: {data?.infoConnect}
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Giá: {customMoney(data.price)}
+          Giá: {customMoney(data?.price)}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          {moment(data.createdAt).fromNow()}
+          {moment(data?.createdAt).fromNow()}
         </Typography>
       </CardContent>
       <CardActions>
         <Button
           onClick={() => {
             console.log("click");
-            history.push(`/chi-tiet-phong-tro/${data.id}`);
+            history.push(`/chi-tiet-phong-tro/${data?.id}`);
           }}
           variant="contained"
           fullWidth

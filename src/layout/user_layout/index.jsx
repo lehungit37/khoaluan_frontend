@@ -4,7 +4,7 @@ import {
   Route,
   BrowserRouter,
   useLocation,
-  useParams
+  useParams,
 } from "react-router-dom";
 import Menu from "../../components/user/menu";
 import Dashboard from "../../features/user/home_page";
@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getInfo } from "../../app/user_slice";
 import Cookies from "js-cookie";
 import { setAuthToken } from "../../api/axios_client";
-
+import Footer from "../../components/user/footer";
 import color from "../../constant/color";
 import { Redirect } from "react-router-dom";
 
@@ -25,8 +25,8 @@ function UserLayout({ component: Component, ...rest }) {
   const { pathname } = useLocation();
   const {
     api: {
-      getInfo: { me }
-    }
+      getInfo: { me },
+    },
   } = useSelector((state) => state.userReducer);
   useEffect(() => {
     if (token) {
@@ -50,7 +50,6 @@ function UserLayout({ component: Component, ...rest }) {
           </>
         )}
       />
-
       <Messager />
     </div>
   );

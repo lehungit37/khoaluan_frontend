@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { payloadCreator } from "../utils/helper";
 import userApi from "../api/user_api";
 import { setAuthToken } from "../api/axios_client";
+import Cookies from "js-cookie";
 
 export const login = createAsyncThunk(
   "user/login",
@@ -37,6 +38,24 @@ export const updateUser = createAsyncThunk(
   "user/updateInfo",
   payloadCreator(userApi.changeInfoUser)
 );
+
+//admin
+
+export const loginWithAdmin = createAsyncThunk(
+  "user/loginAdmin",
+  payloadCreator(userApi.loginAdmin)
+);
+
+export const authenticator = createAsyncThunk(
+  "user/auth",
+  payloadCreator(userApi.authenticator)
+);
+
+export const getInfoAdmin = createAsyncThunk(
+  "user/getInfoAdmin",
+  payloadCreator(userApi.getInfoAdmin)
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -77,8 +96,23 @@ const userSlice = createSlice({
       state.api.auth.login.status = "fulfilled";
       state.api.auth.login.token = token;
       setAuthToken(token);
+      Cookies.set("token", token);
     },
     [login.rejected]: (state) => {
+      state.api.auth.login.status = "rejected";
+      state.api.auth.login.token = "";
+    },
+    [loginWithAdmin.pending]: (state) => {
+      state.api.auth.login.status = "pending";
+    },
+    [loginWithAdmin.fulfilled]: (state, action) => {
+      const { token } = action.payload;
+      state.api.auth.login.status = "fulfilled";
+      state.api.auth.login.token = token;
+      setAuthToken(token);
+      Cookies.set("token", token);
+    },
+    [loginWithAdmin.rejected]: (state) => {
       state.api.auth.login.status = "rejected";
       state.api.auth.login.token = "";
     },
@@ -91,6 +125,18 @@ const userSlice = createSlice({
       state.api.getInfo.me = info;
     },
     [getInfo.rejected]: (state) => {
+      state.api.getInfo.status = "rejected";
+      state.api.getInfo.me = {};
+    },
+    [getInfoAdmin.pending]: (state) => {
+      state.api.getInfo.status = "pending";
+    },
+    [getInfoAdmin.fulfilled]: (state, action) => {
+      const info = action.payload;
+      state.api.getInfo.status = "fulfilled";
+      state.api.getInfo.me = info;
+    },
+    [getInfoAdmin.rejected]: (state) => {
       state.api.getInfo.status = "rejected";
       state.api.getInfo.me = {};
     },
@@ -148,6 +194,16 @@ const userSlice = createSlice({
     },
     [updateUser.rejected]: (state) => {
       state.loading.updateUser = false;
+    },
+
+    [authenticator.pending]: (state) => {
+      console.log("pending");
+    },
+    [authenticator.fulfilled]: (state) => {
+      console.log("fulfilled");
+    },
+    [authenticator.rejected]: (state) => {
+      console.log("rejected");
     }
   }
 });

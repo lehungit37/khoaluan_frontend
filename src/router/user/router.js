@@ -1,11 +1,9 @@
 import Dashboard from "../../features/user/dashboard";
 import RoomDetail from "../../features/user/detail_room";
 import LienHe from "../../features/user/lienhe";
-import ForgetPass from "../../features/user/forget_password";
 import Login from "../../features/user/login";
 import Register from "../../features/user/register";
 import Tutorial from "../../features/user/tutorial";
-
 
 export const UserRouterLocal = [
   {
@@ -38,17 +36,11 @@ export const UserRouterLocal = [
   {
     path: "/lien-he",
     name: "liên hệ",
-    component: LienHe,
-  },{
- 
-    path: "/quen-mat-khau",
-    name: "Quên mật khẩu",
-    component: ForgetPass,
+    component: LienHe
   },
   {
     path: "/huong-dan",
     name: "Hướng dẫn",
-    component: Tutorial,
-  },
-
+    component: Tutorial
+  }
 ];

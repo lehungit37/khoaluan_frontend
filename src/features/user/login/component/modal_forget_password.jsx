@@ -29,17 +29,19 @@ const useStyles = makeStyles(style);
 
 const schema = yup
   .object({
-    email: yup
+    phoneNumber: yup
       .string()
-      .required("Vui lòng nhập email")
+      .required()
       .matches(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        "Định dạng email không đúng"
+        /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g,
+        "Định dạng số điện thoại không đúng"
       )
+      .length(10, "Định dạng số điện thoại không đúng")
+      .required("Vui lòng nhập số điện thoại")
   })
   .required();
 
-const steps = ["Nhập email", "Xác thực "];
+const steps = ["Nhập SDT", "Xác thực ", "Thay đổi mật khẩu"];
 
 export default function ModalForgetPassword(props) {
   const classes = useStyles();
@@ -65,6 +67,7 @@ export default function ModalForgetPassword(props) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [errorMessages, setErrorMessages] = useState("");
+  const [myPhone, setMyPhone] = useState("");
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -108,14 +111,76 @@ export default function ModalForgetPassword(props) {
     setActiveStep(0);
   };
 
-  const onSubmit = (data) => {
+  const onSubmitPhoneNumber = (data) => {
     handleNext();
-    dispatch(forgetPassword(data))
-      .unwrap()
-      .catch((error) => {
-        setErrorMessages(error.messages);
-      });
+    
   };
+
+  const renderModalStep = () => {
+    if (activeStep === 0) return renderStep1();
+    else if (activeStep === 1) return renderStep2();
+    return renderStep3();
+  };
+
+  //step 1: send phone Number
+  const renderStep1 = () => {
+    return (
+      <Box
+        className={classes.formBox}
+        component="form"
+        onSubmit={handleSubmit(onSubmitPhoneNumber)}
+      >
+        <FormTextField
+          control={control}
+          name={"phoneNumber"}
+          label="Số điện thoại"
+          size="small"
+        />
+
+        <Box sx={{ textAlign: "center", marginTop: "15px" }}>
+          <Button
+            onClick={handleSubmit(onSubmitPhoneNumber)}
+            variant="contained"
+          >
+            Xác nhận
+          </Button>
+        </Box>
+      </Box>
+    );
+  };
+
+  //step 2: confirm code,
+  const renderStep2 = () => {};
+
+  //step 3: change Password
+  const renderStep3 = () => {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
+        }}
+      >
+        <Icon color="error" sx={{ width: "70px", height: "70px" }}>
+          <CancelOutlinedIcon sx={{ width: "100%", height: "100%" }} />
+        </Icon>
+
+        <Typography textAlign="center" variant="h6" sx={{ margin: "15px 0px" }}>
+          {errorMessages}
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleReset();
+          }}
+        >
+          Quay lại
+        </Button>
+      </Box>
+    );
+  };
+
   return (
     <div>
       <Modal
@@ -149,120 +214,7 @@ export default function ModalForgetPassword(props) {
               sx={{ paddingTop: "0%", marginTop: "15px" }}
             >
               <Grid item className={classes.formItem}>
-                {activeStep === 0 ? (
-                  <Box
-                    className={classes.formBox}
-                    component="form"
-                    onSubmit={handleSubmit(onSubmit)}
-                  >
-                    <FormTextField
-                      control={control}
-                      name={"email"}
-                      label="Email"
-                      size="small"
-                    />
-
-                    <Box sx={{ textAlign: "center", marginTop: "15px" }}>
-                      <Button
-                        onClick={handleSubmit(onSubmit)}
-                        variant="contained"
-                      >
-                        Xác nhận
-                      </Button>
-                    </Box>
-                  </Box>
-                ) : (
-                  <>
-                    {rejected.forgetPassword ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center"
-                        }}
-                      >
-                        <Icon
-                          color="error"
-                          sx={{ width: "70px", height: "70px" }}
-                        >
-                          <CancelOutlinedIcon
-                            sx={{ width: "100%", height: "100%" }}
-                          />
-                        </Icon>
-
-                        <Typography
-                          textAlign="center"
-                          variant="h6"
-                          sx={{ margin: "15px 0px" }}
-                        >
-                          {errorMessages}
-                        </Typography>
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            handleReset();
-                          }}
-                        >
-                          Quay lại
-                        </Button>
-                      </Box>
-                    ) : (
-                      <>
-                        {loading.forgetPassword ? (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "center"
-                            }}
-                          >
-                            <CircularProgress size={50} />
-
-                            <Typography variant="h6" sx={{ marginTop: "15px" }}>
-                              Đang gửi email...
-                            </Typography>
-                          </Box>
-                        ) : (
-                          <>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center"
-                              }}
-                            >
-                              <Icon
-                                color="success"
-                                sx={{ width: "70px", height: "70px" }}
-                              >
-                                <CheckCircleOutlineOutlinedIcon
-                                  sx={{ width: "100%", height: "100%" }}
-                                />
-                              </Icon>
-
-                              <Typography
-                                variant="h6"
-                                sx={{ margin: "15px 0px" }}
-                              >
-                                Email đã được gửi, vui lòng kiểm tra
-                              </Typography>
-                              <Button
-                                variant="contained"
-                                onClick={() => {
-                                  handleClose();
-                                  history.push("/login");
-                                  handleReset();
-                                }}
-                              >
-                                Đăng nhập
-                              </Button>
-                            </Box>
-                          </>
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
+                {renderModalStep()}
               </Grid>
             </Grid>
             <Box sx={{ display: "flex", flexDirection: "row" }}>

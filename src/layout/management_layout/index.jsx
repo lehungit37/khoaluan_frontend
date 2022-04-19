@@ -13,6 +13,8 @@ import { setAuthToken } from "../../api/axios_client";
 import { getInfo } from "../../app/user_slice";
 import MenuManagement from "../../components/user_management/menu";
 import ModalController from "./../../custom_fileds/modal_controller/index";
+import Menu from "./../../components/user/menu";
+import MenuTop from "./../../components/user_management/menu_top/index";
 
 const drawerWidth = 240;
 function ManagementLayout({ component: Component, ...rest }) {
@@ -43,9 +45,7 @@ function ManagementLayout({ component: Component, ...rest }) {
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
           <Toolbar>
-            <Typography variant="h6" noWrap component="div">
-              <Link to="/">Trang chủ</Link>
-            </Typography>
+            <MenuTop />
           </Toolbar>
         </AppBar>
         <Drawer

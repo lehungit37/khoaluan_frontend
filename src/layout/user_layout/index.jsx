@@ -1,15 +1,6 @@
 import React, { useEffect } from "react";
-import {
-  Switch,
-  Route,
-  BrowserRouter,
-  useLocation,
-  useParams
-} from "react-router-dom";
+import { Switch, Route, useLocation } from "react-router-dom";
 import Menu from "../../components/user/menu";
-import Dashboard from "../../features/user/home_page";
-import ManagementPost from "../../features/user_management/management_post";
-import { UserRouterLocal } from "../../router/user/router";
 import { useSelector, useDispatch } from "react-redux";
 import { getInfo } from "../../app/user_slice";
 import Cookies from "js-cookie";

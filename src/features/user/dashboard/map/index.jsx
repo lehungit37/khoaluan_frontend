@@ -153,12 +153,12 @@ function MapPost(props) {
     >
       {renderMarkerPost()}
 
-      {/* <Marker
+      <Marker
         position={{
           lng: myLocation?.lng,
           lat: myLocation?.lat
         }}
-      /> */}
+      />
       {popup && (
         <InfoWindow
           onCloseClick={(e) => {

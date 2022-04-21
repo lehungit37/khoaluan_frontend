@@ -1,4 +1,4 @@
-import color from "../../../../constant/color";
+import color from "../../../constant/color";
 
 const style = () => {
   return {

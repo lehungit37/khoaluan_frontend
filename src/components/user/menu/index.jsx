@@ -6,13 +6,9 @@ import {
   Button,
   Avatar,
   MenuItem,
-  Divider,
+  IconButton,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import EditIcon from "@mui/icons-material/Edit";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
@@ -20,15 +16,15 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import Cookies from "js-cookie";
-
 import { useDispatch, useSelector } from "react-redux";
 import Images from "../../../constant/images";
 import { Link, NavLink, useHistory } from "react-router-dom";
-
 import style, { StyledMenu } from "./style";
 import color from "../../../constant/color";
 import { getMenu } from "../../../app/menu_slice";
-import { stringToSlug, customMoney } from "../../../utils/helper";
+import { stringToSlug } from "../../../utils/helper";
+import ReponMenu from "./repon";
+import AppsIcon from "@mui/icons-material/Apps";
 
 const useStyles = makeStyles(style);
 
@@ -83,7 +79,7 @@ function Menu() {
     {
       title: "Thông tin cá nhân",
       icon: <AccountCircleOutlinedIcon />,
-      path: "/quan-ly/thong-tin-ca-nhan"
+      path: "/quan-ly/thong-tin-ca-nhan",
     },
     {
       title: "Tin đã lưu",
@@ -238,6 +234,16 @@ function Menu() {
           justifyContent="center"
           columnSpacing={1}
         >
+          <Typography
+            sx={{
+              display: "none",
+              "@media(max-width:768px)": {
+                display: "block",
+              },
+            }}
+          >
+            <ReponMenu />
+          </Typography>
           <Grid item className={classes.navbarItem}>
             <NavLink exact to="/">
               Trang chủ

@@ -11,8 +11,14 @@ function Tutorial() {
   return (
     <>
       <Grid className={classes.container}>
-        <Typography className="animate__heartBeat" variant="h5">
-          Hướng dẫn đăng tin
+        <Typography
+          className="animate__heartBeat"
+          textAlign={"center"}
+          color={"#FF6600	"}
+          variant={"h5"}
+          fontWeight={"bold"}
+        >
+          HƯỚNG DẪN ĐĂNG TIN
         </Typography>
         <Typography sx={{ lineHeight: "2" }}>
           Chào bạn, sau đây là hướng dẫn sử dụng cho thành viên website

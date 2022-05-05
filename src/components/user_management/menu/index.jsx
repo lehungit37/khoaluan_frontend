@@ -8,47 +8,45 @@ import {
   Divider,
   Grid,
   Typography,
-  Avatar
+  Avatar,
 } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import { makeStyles } from "@mui/styles";
 import { NavLink } from "react-router-dom";
 import style from "./style";
-import { customMoney } from "../../../utils/helper";
 import { useSelector } from "react-redux";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Cookies from "js-cookie";
+
 const useStyles = makeStyles(style);
+
 function MenuManagement() {
   const classes = useStyles();
   const {
     api: {
-      getInfo: { me }
-    }
+      getInfo: { me },
+    },
   } = useSelector((state) => state.userReducer);
 
   const menuList = [
     {
       title: "Đăng tin",
       icon: <AddOutlinedIcon />,
-      path: "/quan-ly/dang-tin-moi"
+      path: "/quan-ly/dang-tin-moi",
     },
     {
       title: "Quản lý tin đăng",
       icon: <ListAltOutlinedIcon />,
-      path: "/quan-ly/tin-dang"
+      path: "/quan-ly/tin-dang",
     },
 
     {
       title: "Thông tin cá nhân",
       icon: <AssignmentIndIcon />,
-      path: "/quan-ly/thong-tin-ca-nhan"
-    }
+      path: "/quan-ly/thong-tin-ca-nhan",
+    },
   ];
 
   const renderMenuList = () => {
@@ -83,8 +81,16 @@ function MenuManagement() {
   };
 
   return (
-    <Box sx={{ overflow: "auto" }}>
-      <Box sx={{ padding: "10px 20px" }}>
+    <Box
+      sx={{
+        overflow: "auto",
+      }}
+    >
+      <Box
+        sx={{
+          padding: "10px 20px",
+        }}
+      >
         <Grid container alignItems="center" spacing={1}>
           <Grid item>
             <Avatar alt="Remy Sharp" src={me?.imageUrl} />

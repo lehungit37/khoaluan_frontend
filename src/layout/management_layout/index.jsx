@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -13,6 +13,7 @@ import { setAuthToken } from "../../api/axios_client";
 import { getInfo } from "../../app/user_slice";
 import MenuManagement from "../../components/user_management/menu";
 import ModalController from "./../../custom_fileds/modal_controller/index";
+import PersistentDrawerLeft from "../../components/user_management/menu/repon";
 
 const drawerWidth = 240;
 function ManagementLayout({ component: Component, ...rest }) {
@@ -20,8 +21,8 @@ function ManagementLayout({ component: Component, ...rest }) {
   const { pathname } = useLocation();
   const {
     api: {
-      getInfo: { me }
-    }
+      getInfo: { me },
+    },
   } = useSelector((state) => state.userReducer);
 
   const modalReducer = useSelector((state) => state.modalReducer);
@@ -32,37 +33,54 @@ function ManagementLayout({ component: Component, ...rest }) {
       dispatch(getInfo());
     }
   }, [token]);
+
   return (
     <>
       {token && me.id && <Redirect from="/login" to={`${pathname}`} />}
       {!token && !me.id && <Redirect from={`${pathname}`} to={`/login`} />}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
+
         <AppBar
           position="fixed"
-          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
         >
           <Toolbar>
-            <Typography variant="h6" noWrap component="div">
+            <PersistentDrawerLeft />
+            <Typography component="div" variant="h6">
               <Link to="/">Trang chủ</Link>
             </Typography>
           </Toolbar>
         </AppBar>
+
         <Drawer
           variant="permanent"
           sx={{
             width: drawerWidth,
             flexShrink: 0,
+
             [`& .MuiDrawer-paper`]: {
               width: drawerWidth,
-              boxSizing: "border-box"
-            }
+              boxSizing: "border-box",
+            },
+            "@media(max-width:768px)": {
+              display: "none",
+            },
           }}
         >
           <Toolbar />
           <MenuManagement />
         </Drawer>
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+          }}
+        >
           <Toolbar />
           <Route
             {...rest}

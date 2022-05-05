@@ -11,7 +11,7 @@ import {
   CardMedia,
   Grid,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
@@ -37,8 +37,8 @@ const ButtonStyled = styled(Button)({
   columnGap: "5px",
   "&:hover": {
     background: "#f1f1f1",
-    transition: ".2s"
-  }
+    transition: ".2s",
+  },
 });
 
 function RoomDetail() {
@@ -60,10 +60,15 @@ function RoomDetail() {
     <>
       <Grid
         container
-        spacing={3}
-        sx={{ padding: "0% 10%", margin: "20px 0px", maxWidth: "100%" }}
+        spacing={2}
+        sx={{
+          padding: "1rem 2rem",
+          "@media(max-width:768px)": {
+            padding: "0.5rem",
+          },
+        }}
       >
-        <Grid item md={8} lg={8}>
+        <Grid item md={8} lg={8} xs={12}>
           {infoPost?.relatedImagesLists?.length > 0 && (
             <Slide imagesLink={infoPost?.relatedImagesLists} />
           )}
@@ -74,11 +79,17 @@ function RoomDetail() {
               border: "2px solid #eee",
               display: "flex",
               flexDirection: "column",
-              gap: "15px"
+              gap: "15px",
             }}
           >
             <Typography
-              sx={{ textTransform: "uppercase", fontWeight: "bold" }}
+              sx={{
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                "@media (max-width:768px)": {
+                  flexDirection: "column-reverse",
+                },
+              }}
               variant="h5"
               color="red"
             >
@@ -95,10 +106,10 @@ function RoomDetail() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "5px"
+                  gap: "5px",
                 }}
               >
-                <AttachMoneyIcon color="error" size="small" sx={{"@media(max-width: 768px)": {}}} />
+                <AttachMoneyIcon color="error" size="small" />
                 <Typography
                   sx={{ fontWeight: "bold" }}
                   color="red"
@@ -112,7 +123,7 @@ function RoomDetail() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "5px"
+                  gap: "5px",
                 }}
               >
                 <AccessTimeIcon />
@@ -129,7 +140,7 @@ function RoomDetail() {
               </Typography>
               <Typography
                 sx={{
-                  whiteSpace: "pre-line"
+                  whiteSpace: "pre-line",
                 }}
               >
                 {infoPost.description}
@@ -195,7 +206,7 @@ function RoomDetail() {
               backgroundColor: "#FEBB02",
               padding: "10px",
               rowGap: "5px",
-              height: "230px"
+              height: "230px",
             }}
           >
             <Avatar
@@ -257,7 +268,7 @@ function RoomDetail() {
                     sx={{
                       borderBottom: "1px solid red",
                       background: "#FFEFD5",
-                      width: "100%"
+                      width: "100%",
                     }}
                     className={classes.content_left}
                   >
@@ -284,7 +295,7 @@ function RoomDetail() {
                           height: "50px",
                           display: "webkitBox",
                           webkitBoxOrient: "variant",
-                          textOverflow: "ellipsis"
+                          textOverflow: "ellipsis",
                         }}
                       >
                         <Tooltip title={post.title} arrow placement="top">
@@ -293,7 +304,7 @@ function RoomDetail() {
                               fontWeight: "bold",
                               color: "red",
                               textDecoration: "none",
-                              cursor: "pointer"
+                              cursor: "pointer",
                             }}
                             to={`/chi-tiet-phong-tro/${post.id}`}
                           >
@@ -309,7 +320,7 @@ function RoomDetail() {
                           fontWeight: "bold",
                           margin: "0rem 1rem",
                           display: "flex",
-                          flexDirection: "row"
+                          flexDirection: "row",
                         }}
                       >
                         {customMoney(post.price)}
@@ -321,7 +332,7 @@ function RoomDetail() {
                           cursor: "pointer",
                           margin: "0rem 1rem",
                           display: "flex",
-                          flexDirection: "row"
+                          flexDirection: "row",
                         }}
                       >
                         {moment(post.createdAt).startOf("hour").fromNow()}
@@ -348,12 +359,12 @@ function RoomDetail() {
                       sx={{
                         borderTop: "1px solid red",
                         background: "#FFEFD5",
-                        width: "100%"
+                        width: "100%",
                       }}
                       className={classes.content_left}
                     >
                       {/* Đây là ảnh */}
-                      <Grid item md={4}>
+                      <Grid item md={5} xs={5}>
                         <CardActionArea>
                           <CardMedia
                             component="img"
@@ -364,7 +375,7 @@ function RoomDetail() {
                         </CardActionArea>
                       </Grid>
                       {/* Đây là nội dung */}
-                      <Grid item md={8}>
+                      <Grid item md={7} xs={7}>
                         {/* 1.Title */}
                         <Grid
                           sx={{
@@ -375,7 +386,7 @@ function RoomDetail() {
                             height: "50px",
                             display: "webkitBox",
                             webkitBoxOrient: "variant",
-                            textOverflow: "ellipsis"
+                            textOverflow: "ellipsis",
                           }}
                         >
                           <Tooltip title={post?.title} arrow placement="top">
@@ -384,7 +395,7 @@ function RoomDetail() {
                                 fontWeight: "bold",
                                 color: "red",
                                 textDecoration: "none",
-                                cursor: "pointer"
+                                cursor: "pointer",
                               }}
                               to={`/chi-tiet-phong-tro/${post?.id}`}
                             >
@@ -400,7 +411,7 @@ function RoomDetail() {
                             fontWeight: "bold",
                             margin: "0rem 1rem",
                             display: "flex",
-                            flexDirection: "row"
+                            flexDirection: "row",
                           }}
                         >
                           {customMoney(post?.price)}
@@ -412,7 +423,7 @@ function RoomDetail() {
                             cursor: "pointer",
                             margin: "0rem 1rem",
                             display: "flex",
-                            flexDirection: "row"
+                            flexDirection: "row",
                           }}
                         >
                           {moment(post?.createdAt).startOf("hour").fromNow()}

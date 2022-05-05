@@ -314,15 +314,26 @@ function Footer() {
           backgroundColor: "#E4F0F0",
         }}
       >
-        <Typography variant="h6">CÔNG TY TNHH LBKCORP</Typography>
-        <Typography>Tổng đài CSKH: 0917686101</Typography>
-        <Typography>Copyright © 2015 - 2022 Phongtro123.com</Typography>
-        <Typography>Email: cskh.phongtro123@gmail.com</Typography>
-        <Typography>Trường Đại học Duy Tân University</Typography>
-        <Typography>
-          Giấy phép đăng ký kinh doanh số 0313588502 do Sở kế hoạch và Đầu tư
-          thành phố Đà Nẵng cấp ngày 24 tháng 12 năm 2021.
-        </Typography>
+        <Grid
+          sx={{
+            "@media(max-width:768px)": {
+              display: "none",
+            },
+            "@media (min-width:769px) and (max-width:1024px)": {
+              display: "none",
+            },
+          }}
+        >
+          <Typography variant="h6">CÔNG TY TNHH LBKCORP</Typography>
+          <Typography>Tổng đài CSKH: 0917686101</Typography>
+          <Typography>Copyright © 2015 - 2022 Phongtro123.com</Typography>
+          <Typography>Email: cskh.phongtro123@gmail.com</Typography>
+          <Typography>Trường Đại học Duy Tân University</Typography>
+          <Typography>
+            Giấy phép đăng ký kinh doanh số 0313588502 do Sở kế hoạch và Đầu tư
+            thành phố Đà Nẵng cấp ngày 24 tháng 12 năm 2021.
+          </Typography>
+        </Grid>
         <Grid>
           <Link to="/">
             <img className={classes.image} src={Images.Da_Dangky} />

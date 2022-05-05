@@ -2,9 +2,9 @@ const style = () => {
   return {
     content_left: {
       display: "flex",
-      flexDirection: "column",
-      padding: "1rem 1rem"
-    }
+      flexDirection: "row",
+      padding: "1rem 1rem",
+    },
   };
 };
 

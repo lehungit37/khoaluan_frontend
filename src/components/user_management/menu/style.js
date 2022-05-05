@@ -7,10 +7,10 @@ const style = () => ({
       color: color.BLACK,
       fontSize: 14,
       "&.active": {
-        color: color.RED
-      }
-    }
-  }
+        color: color.RED,
+      },
+    },
+  },
 });
 
 export default style;

@@ -8,7 +8,7 @@ import {
   Link,
   IconButton,
   Stack,
-  Avatar
+  Avatar,
 } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -30,11 +30,11 @@ import { uploadSimpleImage } from "../../../app/image";
 import { updateUser } from "./../../../app/user_slice";
 
 const schema = yup.object({
-  name: yup.string().required("Vui lòng nhập tên hiển thị")
+  name: yup.string().required("Vui lòng nhập tên hiển thị"),
 });
 
 const Input = styled("input")({
-  display: "none"
+  display: "none",
 });
 
 const useStyles = makeStyles(style);
@@ -44,11 +44,11 @@ function UserInfoEdit() {
   const {
     api: {
       auth: {
-        login: { status }
+        login: { status },
       },
-      getInfo: { me }
+      getInfo: { me },
     },
-    loading
+    loading,
   } = useSelector((state) => state.userReducer);
 
   const defaultValues = useMemo(() => me, [me]);
@@ -57,10 +57,10 @@ function UserInfoEdit() {
     control,
     reset,
     handleSubmit,
-    formState: { isDirty }
+    formState: { isDirty },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: defaultValues
+    defaultValues: defaultValues,
   });
   useEffect(() => {
     reset(defaultValues);
@@ -72,7 +72,7 @@ function UserInfoEdit() {
       .then(() => {
         toast.success("Cập nhật thông tin thành công", {
           position: "bottom-left",
-          autoClose: 2000
+          autoClose: 2000,
         });
       })
       .catch((error) => {
@@ -80,20 +80,20 @@ function UserInfoEdit() {
           error.messages || "Hệ thống đang bảo trì, vui lòng quay lại sau",
           {
             position: "bottom-left",
-            autoClose: 2000
+            autoClose: 2000,
           }
         );
       });
   };
   const Input = styled("input")({
-    display: "none"
+    display: "none",
   });
 
   const handleOpenModalChangePassword = () => {
     dispatch(
       openModal({
         dialogProps: {},
-        dialogType: ModalChangePassword
+        dialogType: ModalChangePassword,
       })
     );
   };
@@ -113,20 +113,20 @@ function UserInfoEdit() {
           .then(() => {
             toast.success("Cập nhật ảnh thành công", {
               position: "bottom-left",
-              autoClose: 2000
+              autoClose: 2000,
             });
           })
           .catch((error) => {
             toast.error(error.messages, {
               position: "bottom-left",
-              autoClose: 2000
+              autoClose: 2000,
             });
           });
       })
       .catch((error) => {
         toast.error("Cập nhật ảnh thất bại", {
           position: "bottom-left",
-          autoClose: 2000
+          autoClose: 2000,
         });
       });
   };
@@ -146,6 +146,12 @@ function UserInfoEdit() {
         alignItems="center"
         spacing={3}
         padding={"20px 0px"}
+        sx={{
+          "@media(max-width:768px)": {
+            display: "flex",
+            flexDirection: "column",
+          },
+        }}
       >
         <Grid item md={9}>
           <Box
@@ -204,20 +210,6 @@ function UserInfoEdit() {
                 />
               </Grid>
             </Grid>
-
-            <Grid container sx={{ width: "100%" }} justifyContent="center">
-              <Grid item>
-                <LoadingButton
-                  onClick={handleSubmit(onSubmit)}
-                  color="success"
-                  variant="contained"
-                  disabled={!isDirty}
-                  loading={loading.updateUser}
-                >
-                  Lưu thay đổi
-                </LoadingButton>
-              </Grid>
-            </Grid>
           </Box>
         </Grid>
         <Grid
@@ -226,7 +218,7 @@ function UserInfoEdit() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center"
+            justifyContent: "center",
           }}
         >
           <Box
@@ -234,7 +226,7 @@ function UserInfoEdit() {
               width: "100%",
               display: "flex",
               justifyContent: "center",
-              marginBottom: "15px"
+              marginBottom: "15px",
             }}
           >
             <Avatar
@@ -262,6 +254,23 @@ function UserInfoEdit() {
               </Button>
             </Box>
           </label>
+        </Grid>
+        <Grid
+          container
+          sx={{ width: "100%", padding: "2rem 0" }}
+          justifyContent="center"
+        >
+          <Grid item>
+            <LoadingButton
+              onClick={handleSubmit(onSubmit)}
+              color="success"
+              variant="contained"
+              disabled={!isDirty}
+              loading={loading.updateUser}
+            >
+              Lưu thay đổi
+            </LoadingButton>
+          </Grid>
         </Grid>
       </Grid>
     </Box>

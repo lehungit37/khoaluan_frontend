@@ -1,3 +1,5 @@
+import { height } from "@mui/system";
+
 const K_SIZE = 40;
 
 const greatPlaceStyle = {
@@ -8,58 +10,55 @@ const greatPlaceStyle = {
   height: "60%",
   left: "-20px",
   top: "-20px",
-
   borderRadius: "20px",
-
   textAlign: "center",
   color: "red",
   fontSize: "16px",
   fontWeight: "bold",
   padding: "4px",
-  cursor: "pointer"
+  cursor: "pointer",
 };
 
 const style = () => {
   return {
     box: {
       width: "300px",
-
       padding: "20px",
-      background: "#fff"
+      background: "#fff",
     },
     flexBox: {
       display: "flex",
       flexDirection: "row",
       width: "100%",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
     },
     flexColumn: {
-      flexDirection: "column"
+      flexDirection: "column",
     },
     marginBox: {
-      marginBottom: "20px"
+      marginBottom: "20px",
     },
     fontWeight: {
-      fontWeight: "800 !important"
+      fontWeight: "800 !important",
     },
     fontSize: {
-      fontSize: "20px !important"
+      fontSize: "20px !important",
     },
     toolTipFlex: {
-      flex: 2
+      flex: 2,
     },
     position: {
       position: "absolute",
       top: "-160px",
-      left: "15px"
+      left: "15px",
     },
     absoluteIcon: {
       position: "absolute",
-      fontSize: "30px !important"
+      fontSize: "30px !important",
     },
     fontSizeText: {
-      fontSize: "13px !important"
-    }
+      fontSize: "13px !important",
+    },
   };
 };
 

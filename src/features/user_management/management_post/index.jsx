@@ -5,7 +5,7 @@ import { userToken } from "../../../api/axios_client";
 import {
   displayPost,
   getPostByUser,
-  hiddenPost
+  hiddenPost,
 } from "../../../app/post_slice";
 import Cookies from "js-cookie";
 import Loading from "../../../components/loading";
@@ -35,8 +35,8 @@ function ManagementPost() {
   const history = useHistory();
   const {
     api: {
-      getInfo: { me }
-    }
+      getInfo: { me },
+    },
   } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
@@ -46,13 +46,13 @@ function ManagementPost() {
       .then(() => {
         toast.success("Hiển thị bài viết thành công", {
           position: "bottom-left",
-          autoClose: 2000
+          autoClose: 2000,
         });
       })
       .catch((error) => {
         toast.error(error.messages, {
           position: "bottom-left",
-          autoClose: 2000
+          autoClose: 2000,
         });
       });
   };
@@ -62,13 +62,13 @@ function ManagementPost() {
       .then(() => {
         toast.success("Ẩn bài viết thành công", {
           position: "bottom-left",
-          autoClose: 2000
+          autoClose: 2000,
         });
       })
       .catch((error) => {
         toast.error(error.messages, {
           position: "bottom-left",
-          autoClose: 2000
+          autoClose: 2000,
         });
       });
   };
@@ -77,7 +77,7 @@ function ManagementPost() {
     dispatch(
       openModal({
         dialogProps: { id },
-        dialogType: DeleteModal
+        dialogType: DeleteModal,
       })
     );
   };
@@ -89,7 +89,7 @@ function ManagementPost() {
       accessor: "index",
       disableFilter: false,
       align: "left",
-      width: 30
+      width: 30,
     },
     {
       Header: "Ảnh đại diện",
@@ -98,7 +98,7 @@ function ManagementPost() {
       disableFilter: false,
       align: "left",
       width: "auto",
-      width: 100
+      width: 100,
     },
     {
       Header: "Tiêu đề",
@@ -106,7 +106,7 @@ function ManagementPost() {
       accessor: "title",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Giá",
@@ -114,7 +114,7 @@ function ManagementPost() {
       accessor: "price",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Ngày đăng",
@@ -122,7 +122,7 @@ function ManagementPost() {
       accessor: "updatedAt",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Trạng thái",
@@ -130,7 +130,7 @@ function ManagementPost() {
       accessor: "status",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Tùy chọn",
@@ -138,8 +138,8 @@ function ManagementPost() {
       accessor: "action",
       disableFilter: false,
       align: "left",
-      width: 150
-    }
+      width: 150,
+    },
   ];
 
   const tableData = postData?.map((postItem, index) => {
@@ -187,7 +187,7 @@ function ManagementPost() {
             </IconButton>
           </Tooltip>
         </Box>
-      )
+      ),
     };
   });
 

@@ -5,8 +5,8 @@ const style = () => {
       flex: 1,
       paddingTop: 15,
       overflow: "hidden",
-      height: "87vh"
-    }
+      height: "87vh",
+    },
   };
 };
 

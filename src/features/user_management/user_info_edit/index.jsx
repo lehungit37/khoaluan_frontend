@@ -28,6 +28,7 @@ import { openModal } from "../../../app/modal_slice";
 import ModalChangePassword from "./component/modal_change_password";
 import { uploadSimpleImage } from "../../../app/image";
 import { updateUser } from "./../../../app/user_slice";
+import ModalChangePhoneNumber from "./../change_phonenumber";
 
 const schema = yup.object({
   name: yup.string().required("Vui lòng nhập tên hiển thị")
@@ -94,6 +95,15 @@ function UserInfoEdit() {
       openModal({
         dialogProps: {},
         dialogType: ModalChangePassword
+      })
+    );
+  };
+
+  const handleOpenModalChangePhoneNumber = () => {
+    dispatch(
+      openModal({
+        dialogProps: {},
+        dialogType: ModalChangePhoneNumber
       })
     );
   };
@@ -188,7 +198,12 @@ function UserInfoEdit() {
               </Grid>
               <Grid item md={9}>
                 <Typography variant="h6">{me?.phoneNumber}</Typography>
-                <Button variant="contained">Thay đổi số điện thoại</Button>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenModalChangePhoneNumber}
+                >
+                  Thay đổi số điện thoại
+                </Button>
               </Grid>
             </Grid>
             <Grid container columnSpacing={3}>
@@ -207,15 +222,14 @@ function UserInfoEdit() {
 
             <Grid container sx={{ width: "100%" }} justifyContent="center">
               <Grid item>
-                <LoadingButton
+                <Button
                   onClick={handleSubmit(onSubmit)}
                   color="success"
                   variant="contained"
-                  disabled={!isDirty}
-                  loading={loading.updateUser}
+                  disabled={!isDirty || loading.updateUser}
                 >
-                  Lưu thay đổi
-                </LoadingButton>
+                  {loading.updateUser ? "Đang thay đổi" : " Lưu thay đổi"}
+                </Button>
               </Grid>
             </Grid>
           </Box>

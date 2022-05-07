@@ -27,10 +27,6 @@ const userApi = {
     });
   },
 
-  forgetPassword: (email) => {
-    return axiosClient.post("/auth/forget_password", email);
-  },
-
   changeInfoUser: ({ user, id }) => {
     return axiosClient.put(`/user/update_user/${id}`, user);
   },
@@ -40,7 +36,17 @@ const userApi = {
   },
 
   sendCode: (phoneNumber) => {
-    return axiosClient.get("/auth/send_code", phoneNumber);
+    return axiosClient.get(`/auth/send_code?phoneNumber=${phoneNumber}`);
+  },
+
+  veryfyCode: ({ phoneNumber, code }) => {
+    return axiosClient.get(
+      `/auth/veryfy?phoneNumber=${phoneNumber}&code=${code}`
+    );
+  },
+
+  forgetPassword: (data) => {
+    return axiosClient.post("/auth/forget_password", data);
   }
 };
 

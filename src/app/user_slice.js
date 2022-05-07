@@ -56,6 +56,16 @@ export const getInfoAdmin = createAsyncThunk(
   payloadCreator(userApi.getInfoAdmin)
 );
 
+export const sendCode = createAsyncThunk(
+  "user/sendCode",
+  payloadCreator(userApi.sendCode)
+);
+
+export const veryfy = createAsyncThunk(
+  "user/veryfy_code",
+  payloadCreator(userApi.veryfyCode)
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -79,14 +89,29 @@ const userSlice = createSlice({
       changePassword: false,
       changeAvatar: false,
       forgetPassword: false,
-      updateUser: false
+      updateUser: false,
+      sendCode: false,
+      veryfy: false
     },
+
+    phoneNumber: "",
 
     rejected: {
       forgetPassword: false
     }
   },
-  reducer: {},
+  reducers: {
+    setPhoneNumber: (state, action) => {
+      const data = action.payload;
+
+      console.log(action);
+
+      state.phoneNumber = data;
+    },
+    resetPhoneNumber: (state) => {
+      state.phoneNumber = "";
+    }
+  },
   extraReducers: {
     [login.pending]: (state) => {
       state.api.auth.login.status = "pending";
@@ -172,17 +197,6 @@ const userSlice = createSlice({
     [changeAvatar.rejected]: (state) => {
       state.loading.changeAvatar = false;
     },
-    [forgetPassword.pending]: (state) => {
-      state.loading.forgetPassword = true;
-      state.rejected.forgetPassword = false;
-    },
-    [forgetPassword.fulfilled]: (state) => {
-      state.loading.forgetPassword = false;
-    },
-    [forgetPassword.rejected]: (state) => {
-      state.loading.forgetPassword = false;
-      state.rejected.forgetPassword = true;
-    },
 
     [updateUser.pending]: (state) => {
       state.loading.updateUser = true;
@@ -204,9 +218,41 @@ const userSlice = createSlice({
     },
     [authenticator.rejected]: (state) => {
       console.log("rejected");
+    },
+
+    [forgetPassword.pending]: (state) => {
+      state.loading.forgetPassword = true;
+      state.rejected.forgetPassword = false;
+    },
+    [forgetPassword.fulfilled]: (state) => {
+      state.loading.forgetPassword = false;
+    },
+    [forgetPassword.rejected]: (state) => {
+      state.loading.forgetPassword = false;
+      state.rejected.forgetPassword = true;
+    },
+
+    [sendCode.pending]: (state) => {
+      state.loading.sendCode = true;
+    },
+    [sendCode.fulfilled]: (state) => {
+      state.loading.sendCode = false;
+    },
+    [sendCode.rejected]: (state) => {
+      state.loading.sendCode = false;
+    },
+
+    [veryfy.pending]: (state) => {
+      state.loading.veryfy = true;
+    },
+    [veryfy.fulfilled]: (state) => {
+      state.loading.veryfy = false;
+    },
+    [veryfy.rejected]: (state) => {
+      state.loading.veryfy = false;
     }
   }
 });
 
-export const {} = userSlice.actions;
+export const { setPhoneNumber, resetPhoneNumber } = userSlice.actions;
 export default userSlice.reducer;

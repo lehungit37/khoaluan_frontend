@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import * as yup from "yup";
@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 
 import style from "./style";
 import FormTextField from "../../../../custom_fileds/hook-form/text_field";
+import { useSelector, useDispatch } from "react-redux";
+import { veryfy } from "../../../../app/user_slice";
 
 const useStyles = makeStyles(style);
 const schema = yup
@@ -15,21 +17,43 @@ const schema = yup
   })
   .required();
 
-const Step2ChangePassword = props => {
+const Step2ChangePassword = (props) => {
   const { handleNext } = props;
-
+  const { phoneNumber, loading } = useSelector((state) => state.userReducer);
+  const [errorText, setErrorText] = useState("");
+  const dispatch = useDispatch();
   const classes = useStyles();
 
-  const { control, reset, handleSubmit, formState: {} } = useForm({
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: {}
+  } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       code: ""
     }
   });
 
-  const onSubmitPhoneNumber = data => {
-    console.log(data);
-    handleNext();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorText("");
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  });
+
+  const onSubmitPhoneNumber = (data) => {
+    const { code } = data;
+    dispatch(veryfy({ phoneNumber, code }))
+      .unwrap()
+      .then(() => {
+        handleNext();
+      })
+      .catch((error) => {
+        setErrorText(error.messages);
+      });
   };
 
   return (
@@ -47,9 +71,15 @@ const Step2ChangePassword = props => {
         </Grid>
       </Grid>
 
+      <Box>{errorText && <Typography>{errorText}</Typography>}</Box>
+
       <Box sx={{ textAlign: "center", marginTop: "15px" }}>
-        <Button onClick={handleSubmit(onSubmitPhoneNumber)} variant="contained">
-          Xác nhận
+        <Button
+          disabled={loading.veryfy}
+          onClick={handleSubmit(onSubmitPhoneNumber)}
+          variant="contained"
+        >
+          {loading.veryfy ? "Đang xác thực" : "Xác nhận"}
         </Button>
       </Box>
     </Box>

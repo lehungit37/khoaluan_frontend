@@ -24,10 +24,10 @@ const MenuTop = () => {
   }, []);
 
   return (
-    <Grid container>
+    <Grid container sx={{ alignItems: "center" }}>
       <Grid item md={2}>
         <Box sx={{ width: "100%" }}>
-          <img style={{ width: "100%" }} src={Images.MAIN_LOGO} />
+          <img style={{ width: "100%" }} src={Images.LOGO_2} />
         </Box>
       </Grid>
       <Grid item md={10}>

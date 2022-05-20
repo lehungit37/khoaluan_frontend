@@ -207,6 +207,8 @@ function RoomDetail() {
               padding: "10px",
               rowGap: "5px",
               height: "230px",
+              border: "1px solid #FEBB02",
+              borderRadius: "15px ",
             }}
           >
             <Avatar

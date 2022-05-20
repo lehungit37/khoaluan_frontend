@@ -249,6 +249,7 @@ function Menu() {
               Trang chủ
             </NavLink>
           </Grid>
+
           {categories?.map((category, key) => {
             return (
               <Grid key={key} item className={classes.navbarItem}>

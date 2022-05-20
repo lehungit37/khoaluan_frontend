@@ -4,7 +4,7 @@ import postApi from "./../../../api/post";
 
 export const getPostData = createAsyncThunk(
   "post/getdata",
-  payloadCreator(postApi.getDataByCategories)
+  payloadCreator(postApi.getAllPost)
 );
 
 const dashboardSlice = createSlice({
@@ -13,7 +13,11 @@ const dashboardSlice = createSlice({
     loading: {
       getData: false
     },
-    postData: []
+    postData: [],
+    priceSelected: "all",
+    from: 0,
+    to: 99999999999,
+    districtId: "all"
   },
   reducers: {
     changeLikePost: (state, action) => {
@@ -24,6 +28,18 @@ const dashboardSlice = createSlice({
       cloneData[index].favorite = status;
 
       state.postData = cloneData;
+    },
+
+    changePricePost: (state, action) => {
+      const { from, to, priceSelected } = action.payload;
+      state.from = from;
+      state.to = to;
+      state.priceSelected = priceSelected;
+    },
+
+    changeDistrictId: (state, action) => {
+      const districtId = action.payload;
+      state.districtId = districtId;
     }
   },
   extraReducers: {
@@ -53,9 +69,10 @@ const dashboardSlice = createSlice({
     },
     [getPostData.rejected]: (state) => {
       state.loading.getData = false;
+      state.postData = [];
     }
   }
 });
 
-export const { changeLikePost } = dashboardSlice.actions;
+export const { changeLikePost, changePricePost } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

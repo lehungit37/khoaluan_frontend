@@ -10,6 +10,7 @@ import color from "../../constant/color";
 import { Redirect } from "react-router-dom";
 
 import Messager from "../../components/support_message";
+import FilterPost from "./../../components/user/filter/index";
 function UserLayout({ component: Component, ...rest }) {
   const dispatch = useDispatch();
   const token = Cookies.get("token");

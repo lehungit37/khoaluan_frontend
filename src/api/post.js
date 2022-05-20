@@ -1,6 +1,9 @@
 import axiosClient from "./axios_client";
 
 const postApi = {
+  getAllPost: (param) => {
+    return axiosClient.get(`/post/get_all_post?${param}`);
+  },
   getDataByCategories: (id = "all") => {
     return axiosClient.get(`/post/get_post_by_categories/${id}`);
   },

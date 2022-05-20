@@ -34,9 +34,13 @@ function AdminLayout({ component: Component, ...rest }) {
 
   return (
     <>
+      <Redirect from={`admin`} to={`/admin/login`} />
+
       {token && me.id && <Redirect from="/admin/login" to={`${pathname}`} />}
       {!token && !me.id && (
-        <Redirect from={`${pathname}`} to={`/admin/login`} />
+        <>
+          <Redirect from={`${pathname}`} to={`/admin/login`} />
+        </>
       )}
       <Route
         {...rest}

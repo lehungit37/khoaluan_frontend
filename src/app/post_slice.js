@@ -58,7 +58,13 @@ const postSlice = createSlice({
     postData: [],
     totalData: 0,
     page: 1,
-    limit: 15
+    limit: 15,
+    filterByPrice: {
+      id: "all",
+      name: "Tất cả",
+      from: 0,
+      to: 99999999999
+    }
   },
   reducer: {},
   extraReducers: {

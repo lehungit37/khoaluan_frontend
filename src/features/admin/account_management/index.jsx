@@ -22,9 +22,6 @@ import AddIcon from "@mui/icons-material/Add";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { AccountTree } from "@mui/icons-material";
-import { customMoney } from "../../../utils/helper";
-import { openModal } from "../../../app/modal_slice";
-import DeleteModal from "./component/delete_modal";
 
 const useStyles = makeStyles();
 function ManagementAccount() {
@@ -53,32 +50,32 @@ function ManagementAccount() {
     {
       Header: "Ảnh đại diện",
       Footer: "Ảnh đại diện",
-      accessor: "imagePost",
+      accessor: "imageUrl",
       disableFilter: false,
       align: "left",
       width: "auto",
       width: 100,
     },
     {
-      Header: "Tiêu đề",
-      Footer: "Tiêu đề",
-      accessor: "title",
+      Header: "Tên người dùng",
+      Footer: "Tên người dùng",
+      accessor: "name",
       disableFilter: false,
       align: "left",
       width: "auto",
     },
     {
-      Header: "Giá",
-      Footer: "Giá",
-      accessor: "price",
+      Header: "Email",
+      Footer: "Email",
+      accessor: "email",
       disableFilter: false,
       align: "left",
       width: "auto",
     },
     {
-      Header: "Ngày đăng",
-      Footer: "Ngày đăng",
-      accessor: "updatedAt",
+      Header: "Số điện thoại",
+      Footer: "Số điện thoại",
+      accessor: "phoneNumber",
       disableFilter: false,
       align: "left",
       width: "auto",
@@ -86,8 +83,8 @@ function ManagementAccount() {
     {
       Header: "Trạng thái",
       Footer: "Trạng thái",
-      accessor: "status",
-      disableFilter: false,
+      accessor: "isLock",
+      disableFilter: true,
       align: "left",
       width: "auto",
     },
@@ -104,38 +101,49 @@ function ManagementAccount() {
   const datafetch = [
     {
       id: "1",
-      imagePost:
-        "https://cdn.sforum.vn/sforum/wp-content/uploads/2018/11/3-8.png",
-      title: "Huy",
-      price: 20000,
+      imageUrl: "Hello",
+      name: "Huy",
+      email: "qinqin2109@gmail.com",
       phoneNumber: "0905705567",
-      status: true,
+      isLock: true,
+      permission: "admin",
+    },
+    {
+      id: "1",
+      imageUrl: "Hello",
+      name: "Huy",
+      email: "qinqin2109@gmail.com",
+      phoneNumber: "0905705567",
+      isLock: true,
+      permission: "admin",
+    },
+    {
+      id: "1",
+      imageUrl: "Hello",
+      name: "Huy",
+      email: "qinqin2109@gmail.com",
+      phoneNumber: "0905705567",
+      isLock: true,
       permission: "admin",
     },
   ];
 
-  const handleOpenModalDelete = (id) => {
-    dispatch(
-      openModal({
-        dialogProps: { id },
-        dialogType: DeleteModal,
-      })
-    );
-  };
-
-  const tableData = datafetch?.map((posts, index) => {
+  const tableData = datafetch?.map((account, index) => {
     return {
       index: index + 1,
-      imagePost: <img style={{ width: "100%" }} src={posts.imagePost} />,
-      title: posts.title,
-      price: <Typography>{customMoney(posts.price)}/Tháng</Typography>,
-      updatedAt: moment(posts.updatedAt).fromNow(),
-      status: posts.status ? "Đang hiển thị" : "Đã ẩn",
+      imageUrl: <img src={account.imageUrl} />,
+      name: account.name,
+      email: account.email,
+      phoneNumber: account.phoneNumber,
+      isLock: (
+        <Typography>{account.isLock ? "Đang hoạt động" : "Bị khóa"}</Typography>
+      ),
+      permission: account.permission,
       action: (
         <Box>
-          {posts.status ? (
+          {account.status ? (
             <>
-              <Tooltip title="Khóa bài viết" arrow placement="top-start">
+              <Tooltip title="Khóa tài khoản" arrow placement="top-start">
                 <IconButton
                 // disabled={loading.hiddenPost}
                 >
@@ -145,21 +153,21 @@ function ManagementAccount() {
             </>
           ) : (
             <>
-              <Tooltip title="Mở khóa bài viết" arrow placement="top-start">
+              <Tooltip title="Mở khóa" arrow placement="top-start">
                 <IconButton>
                   <LockOpenIcon color="primary" />
                 </IconButton>
               </Tooltip>
             </>
           )}
-          <Tooltip title="Xem thông tin bài viết" arrow placement="top-start">
+          <Tooltip title="Sửa tài khoản" arrow placement="top-start">
             <IconButton>
-              <RemoveRedEyeIcon color="primary" />
+              <ModeEditOutlineIcon color="success" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Xóa bài" arrow placement="top-start">
-            <IconButton onClick={() => handleOpenModalDelete(posts.id)}>
-              <ClearIcon color="error" />
+          <Tooltip title="Xóa tài khoản" arrow placement="top-start">
+            <IconButton>
+              <DeleteOutlineOutlinedIcon color="error" />
             </IconButton>
           </Tooltip>
         </Box>

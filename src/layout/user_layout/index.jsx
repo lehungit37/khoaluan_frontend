@@ -5,10 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { getInfo } from "../../app/user_slice";
 import Cookies from "js-cookie";
 import { setAuthToken } from "../../api/axios_client";
-
+import Footer from "../../components/user/footer";
 import color from "../../constant/color";
 import { Redirect } from "react-router-dom";
-
 import Messager from "../../components/support_message";
 import FilterPost from "./../../components/user/filter/index";
 function UserLayout({ component: Component, ...rest }) {
@@ -42,7 +41,6 @@ function UserLayout({ component: Component, ...rest }) {
           </>
         )}
       />
-
       <Messager />
     </div>
   );

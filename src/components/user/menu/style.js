@@ -21,7 +21,9 @@ const style = () => {
     navbarItem: {
       display: "flex",
       justifyContent: "center",
-
+      "@media(max-width:768px)": {
+        display: "none",
+      },
       "& a": {
         textDecoration: "none",
         color: color.WHITE,
@@ -30,6 +32,22 @@ const style = () => {
         transition: ".3s easy-in-out",
         "&.active, &:hover": {
           background: color.RED,
+        },
+      },
+    },
+
+    repon_navbarItem: {
+      display: "flex",
+      flexDirection: "column",
+      "& a": {
+        textDecoration: "none",
+        color: "#000",
+        fontWeight: "bold",
+        padding: "15px 20px",
+        transition: ".3s easy-in-out",
+        "&.active, &:hover": {
+          background: color.RED,
+          width: "100%",
         },
       },
     },

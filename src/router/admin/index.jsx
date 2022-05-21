@@ -1,12 +1,10 @@
-import React from 'react'
-import {Switch, Route, useRouteMatch, Redirect} from "react-router-dom"
-import AdminRouteLocal from './router';
-import LoginAdmin from '../../features/admin/login'
+import React from "react";
+import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
+import AdminRouteLocal from "./router";
+import LoginAdmin from "../../features/admin/login";
 
 function AdminMainRoute() {
-    const {path} = useRouteMatch()
-    
-
+  const { path } = useRouteMatch();
 
   return (
     <Switch>
@@ -18,9 +16,9 @@ function AdminMainRoute() {
           component={item.component}
         />
       ))}
-      <Route exact path = {`${path}/login`} component={LoginAdmin}/>
+      <Route exact path={`${path}/login`} component={LoginAdmin} />
     </Switch>
   );
 }
 
-export default AdminMainRoute
+export default AdminMainRoute;

@@ -16,6 +16,7 @@ import Login from "./layout/Login";
 import { createBrowserHistory } from "history";
 import { SkeletonTheme } from "react-loading-skeleton";
 import moment from "moment";
+import "animate.css";
 
 import "moment/locale/vi"; // without this line it didn't work
 moment.locale("vi");

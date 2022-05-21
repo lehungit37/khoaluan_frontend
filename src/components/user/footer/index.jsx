@@ -20,10 +20,16 @@ function Footer() {
 
   return (
     <>
-      <Grid className={classes.fabove}>
-        <Grid className={classes.fabove_1}>
+      <Grid className={classes.above}>
+        <Grid className={classes.above_1}>
           <h3>Tại sao lại chọn PhongTro123.com?</h3>
-          <Typography>
+          <Typography
+            sx={{
+              "@media(max-width:768px)": {
+                display: "none",
+              },
+            }}
+          >
             Chúng tôi biết bạn có rất nhiều lựa chọn, nhưng Phongtro123.com tự
             hào là trang web đứng top google về các từ khóa:
             <Link href="#" underline="hover" sx={{ color: "blue" }}>
@@ -49,8 +55,11 @@ function Footer() {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              margin: "1rem 7rem",
-              textAlign: "center",
+              margin: "0 5rem",
+              "@media(max-width:768px)": {
+                display: "flex",
+                flexDirection: "column",
+              },
             }}
           >
             <Grid>
@@ -78,7 +87,13 @@ function Footer() {
             readOnly
           />
           <br />
-          <Typography>
+          <Typography
+            sx={{
+              "@media(max-width:768px)": {
+                display: "none",
+              },
+            }}
+          >
             "Trước khi biết website phongtro123, mình phải tốn nhiều công sức và
             chi phí cho việc đăng tin cho thuê: từ việc phát tờ rơi, dán giấy,
             và đăng lên các website khác nhưng hiệu quả không cao. Từ khi biết
@@ -102,7 +117,7 @@ function Footer() {
             Đăng tin ngay
           </Button>
         </Grid>
-        <Grid className={classes.fabove_2}>
+        <Grid className={classes.above_1}>
           <img
             width={"50%"}
             src="https://phongtro123.com/images/support-bg.jpg"
@@ -113,8 +128,13 @@ function Footer() {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              margin: "1rem 7rem",
-              textAlign: "center",
+              margin: "1rem 5rem",
+
+              "@media(max-width:768px)": {
+                display: "flex",
+                flexDirection: "column",
+                padding: "1rem 0",
+              },
             }}
           >
             <Grid>
@@ -146,26 +166,45 @@ function Footer() {
       </Grid>
       <Grid container className={classes.container}>
         <Grid
-          item
-          md={4}
+          md={3}
           className={classes.contentFooter}
-          sx={{ borderRight: "1px solid #A9A9A9" }}
+          sx={{
+            boxShadow: "7px 0px 10px 0px rgba(0,0,0,0.1)",
+            borderRight: "1px solid #A9A9A9",
+            "@media(max-width:768px)": {
+              borderRight: "none",
+            },
+          }}
         >
           <Link to="/">
             <img width={"40%"} src={Images.MAIN_LOGO} />
           </Link>
-          <Typography color={"#800000	"}>
+          <Typography
+            color={"#800000	"}
+            sx={{
+              "@media(max-width:768px)": {
+                display: "none",
+              },
+            }}
+          >
             FastRoom tự hào có lượng dữ liệu bài đăng lớn nhất trong lĩnh vực
             cho thuê phòng trọ.
           </Typography>
         </Grid>
         <Grid
-          item
           md={3}
           className={classes.contentFooter}
-          sx={{ borderRight: "1px solid #A9A9A9" }}
+          sx={{
+            borderRight: "1px solid #A9A9A9",
+            boxShadow: "7px 0px 10px 0px rgba(0,0,0,0.1)",
+            "@media(max-width:768px)": {
+              borderRight: "none",
+            },
+          }}
         >
-          <Typography fontWeight={"bold"}>Về FASTROOM</Typography>
+          <Typography fontWeight={"bold"} color={"blue"} fontSize={"18px"}>
+            Về FASTROOM
+          </Typography>
           <Link href="#" underline="hover" sx={{ color: "#000" }}>
             Trang chủ
           </Link>
@@ -195,14 +234,19 @@ function Footer() {
           </Link>
         </Grid>
         <Grid
-          item
-          md={2.5}
+          md={3}
           className={classes.contentFooter}
           sx={{
+            boxShadow: "7px 0px 10px 0px rgba(0,0,0,0.1)",
             borderRight: "1px solid #A9A9A9",
+            "@media(max-width:768px)": {
+              borderRight: "none",
+            },
           }}
         >
-          <Typography fontWeight={"bold"}>Hổ trợ khách hàng</Typography>
+          <Typography fontWeight={"bold"} color={"blue"} fontSize={"18px"}>
+            Hổ trợ khách hàng
+          </Typography>
           <Link href="#" underline="hover" sx={{ color: "#000" }}>
             Câu hỏi thường gặp
           </Link>
@@ -223,8 +267,16 @@ function Footer() {
             Giải quyết khiếu nại
           </Link>
         </Grid>
-        <Grid item md={2.5} className={classes.contentFooter}>
-          <Typography fontWeight={"bold"}>Liên hệ với chúng tôi</Typography>
+        <Grid
+          md={3}
+          className={classes.contentFooter}
+          sx={{
+            boxShadow: "7px 0px 10px 0px rgba(0,0,0,0.1)",
+          }}
+        >
+          <Typography fontWeight={"bold"} color={"blue"} fontSize={"18px"}>
+            Liên hệ với chúng tôi
+          </Typography>
           <Link>
             <FacebookIcon fontSize="large" cursor="pointer" />
           </Link>
@@ -262,21 +314,27 @@ function Footer() {
           backgroundColor: "#E4F0F0",
         }}
       >
-        <Typography variant="h6">CÔNG TY TNHH LBKCORP</Typography>
-        <Typography>Tổng đài CSKH: 0917686101</Typography>
-        <Typography>Copyright © 2015 - 2022 Phongtro123.com</Typography>
-        <Typography>Email: cskh.phongtro123@gmail.com</Typography>
-        <Typography>Trường Đại học Duy Tân University</Typography>
-        <Typography>
-          Giấy phép đăng ký kinh doanh số 0313588502 do Sở kế hoạch và Đầu tư
-          thành phố Đà Nẵng cấp ngày 24 tháng 12 năm 2021.
-        </Typography>
         <Grid
           sx={{
-            height: "50px",
-            margin: "1rem 0.5rem",
+            "@media(max-width:768px)": {
+              display: "none",
+            },
+            "@media (min-width:769px) and (max-width:1024px)": {
+              display: "none",
+            },
           }}
         >
+          <Typography variant="h6">CÔNG TY TNHH LBKCORP</Typography>
+          <Typography>Tổng đài CSKH: 0917686101</Typography>
+          <Typography>Copyright © 2015 - 2022 Phongtro123.com</Typography>
+          <Typography>Email: cskh.phongtro123@gmail.com</Typography>
+          <Typography>Trường Đại học Duy Tân University</Typography>
+          <Typography>
+            Giấy phép đăng ký kinh doanh số 0313588502 do Sở kế hoạch và Đầu tư
+            thành phố Đà Nẵng cấp ngày 24 tháng 12 năm 2021.
+          </Typography>
+        </Grid>
+        <Grid>
           <Link to="/">
             <img className={classes.image} src={Images.Da_Dangky} />
           </Link>

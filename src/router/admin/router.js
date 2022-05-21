@@ -1,14 +1,19 @@
-import PostManagement from "../../features/admin/post_management";
-import UserManagement from "../../features/admin/user_management";
+import ManagementPost from "../../features/admin/post_management";
+import ManagementAccount from "../../features/admin/account_management";
+import ManagementCategory from "../../features/admin/categories_management";
 
 const AdminRouteLocal = [
   {
     path: "/quan-ly-bai-dang",
-    component: PostManagement,
+    component: ManagementPost,
   },
   {
     path: "/quan-ly-nguoi-dung",
-    component: UserManagement,
+    component: ManagementAccount,
+  },
+  {
+    path: "/quan-ly-danh-muc",
+    component: ManagementCategory,
   },
 ];
 

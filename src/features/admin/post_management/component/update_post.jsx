@@ -1,35 +1,37 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import { LoadingButton } from "@mui/lab";
 import {
-  Typography,
-  Grid,
-  Box,
-  Button,
-  TextField,
-  Tooltip,
-  IconButton,
   Alert,
   AlertTitle,
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import SelectForm from "../../../custom_fileds/hook-form/select_form";
-import FormTextField from "../../../custom_fileds/hook-form/text_field";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+import SelectForm from "../../../../custom_fileds/hook-form/select_form";
+import FormTextField from "../../../../custom_fileds/hook-form/text_field";
+import PostMap from "../../new_post/component/map/post_map";
+import UploadImage from "./upload_image";
 import {
   getAddress,
   getCategories,
   getRootLocation,
-  addPost,
-  resetImagesLink,
-} from "./new_post_slice";
-import { useDispatch, useSelector } from "react-redux";
-import UploadImage from "./component/upload_image";
-import DoDisturbAltIcon from "@mui/icons-material/DoDisturbAlt";
-import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import PostMap from "./component/map/post_map";
+  uploadImage
+} from "../../new_post/new_post_slice";
+import { getInfoPostEdit, updatePost } from "./../../../../app/post_slice";
+import Loading from "../../../../components/loading";
 import { toast } from "react-toastify";
+import { uploadSimpleImage } from "../../../../app/image";
+
 const schema = yup
   .object({
     cityId: yup.string().required("Vui lòng chọn thành phố"),
@@ -49,28 +51,31 @@ const schema = yup
       .number("Số tiền không hợp lệ, Vui lòng nhập lại")
       .min(1, "Số tiền không hợp lệ, Vui lòng nhập lại")
       .required("Vui lòng nhập số tiền muốn cho thuê"),
-    objectId: yup.string().required("Vui lòng chọn đối tượng cho thuê"),
+    objectId: yup.string().required("Vui lòng chọn đối tượng cho thuê")
   })
   .required();
 
-function NewPost() {
+const UpdatePost = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { address, formDataValue, imagesLink, categories, loadingNewPost } =
-    useSelector((state) => state.newPostReducer);
+  const { infoPost, loading } = useSelector((state) => state.postReducer);
+  const defaultValues = useMemo(() => infoPost, [infoPost]);
+  const { address, categories, loadingNewPost } = useSelector(
+    (state) => state.newPostReducer
+  );
+  const [imagesLink, setImagesLink] = useState([]);
+  const [imagePost, setImagePost] = useState("");
+  const [isChangeRelatedIamge, setIsChangeRelatedImage] = useState(false);
   const [exactAddress, setExactAddress] = useState({
-    cityId: formDataValue.cityId,
-    districtId: formDataValue.districtId,
-    street: formDataValue.street,
+    cityId: infoPost?.cityId,
+    districtId: infoPost?.districtId,
+    street: infoPost?.street
   });
   const [getLocationAddress, setGetLocationAddress] = useState(false);
-  const {
-    api: {
-      getInfo: { me },
-    },
-  } = useSelector((state) => state.userReducer);
-  let defaultValues = useMemo(() => formDataValue, [formDataValue]);
 
-  const [stringAddress, setStringAddress] = useState("");
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+
+  const [stringAddress, setStringAddress] = useState(infoPost.address);
   const [rootLocation, setRootLocation] = useState("");
   const renderExactAddress = () => {
     const indexCity = address?.city?.findIndex(
@@ -99,20 +104,35 @@ function NewPost() {
     getValues,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues,
+    defaultValues
   });
 
   useEffect(() => {
-    dispatch(getAddress());
-    dispatch(getCategories());
+    reset(defaultValues);
+  }, [defaultValues]);
+
+  useEffect(() => {
+    setRootLocation(infoPost?.rootLocation);
+    setStringAddress(infoPost?.address);
+    setImagesLink(infoPost.relatedImagesLists);
+    setImagePost(infoPost.imagePost);
+  }, [infoPost]);
+
+  useEffect(() => {
+    dispatch(getInfoPostEdit(id))
+      .unwrap()
+      .then(() => {
+        dispatch(getAddress());
+        dispatch(getCategories());
+      });
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (stringAddress) {
+      if (stringAddress && stringAddress !== infoPost?.address) {
         setGetLocationAddress(true);
         dispatch(getRootLocation({ address: stringAddress }))
           .unwrap()
@@ -133,43 +153,44 @@ function NewPost() {
     };
   }, [stringAddress]);
 
-  useEffect(() => {
-    setValue("infoConnect", me?.phoneNumber);
-  }, [me]);
-
   const onSubmit = (data) => {
+    [
+      "address",
+      "createdAt",
+      "districtId",
+      "infoConnect",
+      "relatedImagesLists",
+      "rootLocation",
+      "street",
+      "updatedAt"
+    ].forEach((e) => delete data[e]);
     const dataSend = {
       info: {
         ...data,
-        imagePost:
-          imagesLink[0]?.url ||
-          "http://localhost:3000/api/images/default-logo.png",
-        rootLocation,
-        userId: me?.id,
-      },
-      relatedImages: imagesLink || [],
+        imagePost
+      }
     };
+    if (isChangeRelatedIamge) {
+      dataSend.newRelatedImage = imagesLink;
+      dataSend.oldRelatedImage = infoPost.relatedImagesLists;
+    }
 
-    setGetLocationAddress(true);
-
-    dispatch(addPost(dataSend))
+    setLoadingUpdate(true);
+    dispatch(updatePost({ dataSend, id }))
       .unwrap()
       .then(() => {
-        toast.success("Thêm bài viết thành công", {
+        toast.success("Cập nhật bài viết thành công", {
           position: "bottom-left",
-          autoClose: 2000,
+          autoClose: 2000
         });
-        reset();
-        setGetLocationAddress(false);
-        dispatch(resetImagesLink());
-        setRootLocation("16.054407,108.202164 ");
+        setLoadingUpdate(false);
       })
       .catch((error) => {
         toast.error(error.messages, {
           position: "bottom-left",
-          autoClose: 2000,
+          autoClose: 2000
         });
-        setGetLocationAddress(false);
+        setLoadingUpdate(false);
       });
   };
 
@@ -195,6 +216,42 @@ function NewPost() {
     );
   };
 
+  const handleUploadMultiImage = (formData) => {
+    dispatch(uploadImage(formData))
+      .unwrap()
+      .then((data) => {
+        setImagesLink(data);
+        setIsChangeRelatedImage(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.messages, {
+          position: "bottom-left",
+          autoClose: 2000
+        });
+      });
+  };
+
+  const handleUploadSimpleImage = (formData) => {
+    dispatch(uploadSimpleImage(formData))
+      .unwrap()
+      .then((data) => {
+        setImagePost(data?.url);
+        setIsChangeRelatedImage(true);
+      })
+      .catch((error) => {
+        toast.error(error.messages, {
+          position: "bottom-left",
+          autoClose: 2000
+        });
+      });
+  };
+
+  //render Layout
+  if (loading.getInfo || loadingNewPost.getAddress) {
+    return <Loading />;
+  }
+
   return (
     <>
       <Typography
@@ -202,21 +259,12 @@ function NewPost() {
         sx={{
           borderBottom: "1px solid #000",
           padding: "10px 0px",
-          marginBottom: "10px",
+          marginBottom: "10px"
         }}
       >
-        Đăng tin mới
+        Chỉnh sửa tin
       </Typography>
-      <Grid
-        container
-        spacing={3}
-        sx={{
-          "@media(max-width:768px)": {
-            display: "flex",
-            flexDirection: "column",
-          },
-        }}
-      >
+      <Grid container spacing={3}>
         <Grid item md={7}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box sx={{ marginTop: "20px" }}>
@@ -226,8 +274,9 @@ function NewPost() {
                 columnSpacing={4}
                 rowSpacing={5}
                 alignItems="center"
+                sx={{ marginBottom: "10px" }}
               >
-                <Grid item md={4} xs={12}>
+                <Grid item md={4}>
                   <SelectForm
                     name="cityId"
                     label="Thành Phố"
@@ -238,9 +287,10 @@ function NewPost() {
                     labelItem="name"
                     size="small"
                     onChange={handleChangeAddress}
+                    disabled
                   />
                 </Grid>
-                <Grid item md={4} xs={12}>
+                <Grid item md={4}>
                   <SelectForm
                     name="districtId"
                     label="Quận/Huyện"
@@ -251,19 +301,21 @@ function NewPost() {
                     labelItem="name"
                     size="small"
                     onChange={handleChangeAddress}
+                    disabled
                   />
                 </Grid>
-                <Grid item md={4} xs={12}>
+                <Grid item md={4}>
                   <FormTextField
                     control={control}
                     name={"street"}
                     label="Địa chỉ nhà"
                     size="small"
                     onChange={handleChangeAddress}
+                    disabled
                   />
                 </Grid>
               </Grid>
-              <Grid item md={12} padding={"1rem 0"} display="flex">
+              <Grid item md={12} display="flex">
                 <FormTextField
                   control={control}
                   name={"address"}
@@ -348,7 +400,7 @@ function NewPost() {
                     options={[
                       { id: "all", name: "Tất cả" },
                       { id: "male", name: "Nam" },
-                      { id: "female", name: "Nữ" },
+                      { id: "female", name: "Nữ" }
                     ]}
                     keyItem="id"
                     labelItem="name"
@@ -358,17 +410,28 @@ function NewPost() {
               </Grid>
             </Box>
             <Box>
-              <Typography variant="h5">Hình ảnh</Typography>
-              <UploadImage />
+              <Typography variant="h5">Hình ảnh hiển thị</Typography>
+              <UploadImage
+                handleUpload={handleUploadSimpleImage}
+                imagesLink={[{ url: imagePost }]}
+              />
             </Box>
             <Box>
+              <Typography variant="h5">Hình ảnh liên quan</Typography>
+              <UploadImage
+                handleUpload={handleUploadMultiImage}
+                imagesLink={imagesLink}
+                multiple
+              />
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Button
                 variant="contained"
                 type={"submit"}
                 onSubmit={handleSubmit(onSubmit)}
-                sx={{ backgroundColor: "#006600		" }}
+                disabled={loadingUpdate}
               >
-                Đăng bài
+                Cập nhật
               </Button>
             </Box>
           </form>
@@ -376,12 +439,7 @@ function NewPost() {
         <Grid
           item
           md={5}
-          xs={12}
-          sx={{
-            paddingTop: "40px !important",
-            display: "flex",
-            flexDirection: "column",
-          }}
+          sx={{ paddingTop: "40px !important", height: "500px" }}
         >
           <PostMap rootLocation={rootLocation} />
           <Box sx={{ marginTop: "20px" }}>
@@ -408,6 +466,6 @@ function NewPost() {
       </Grid>
     </>
   );
-}
+};
 
-export default NewPost;
+export default UpdatePost;

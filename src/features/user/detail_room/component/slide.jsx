@@ -39,7 +39,7 @@ const Slide = (props) => {
       },
       created() {
         setLoaded(true);
-      }
+      },
       //   drag: false,
     },
     [
@@ -70,7 +70,7 @@ const Slide = (props) => {
         slider.on("dragStarted", clearNextTimeout);
         slider.on("animationEnded", nextTimeout);
         slider.on("updated", nextTimeout);
-      }
+      },
     ]
   );
 
@@ -80,7 +80,7 @@ const Slide = (props) => {
         <div ref={refCallback} className="keen-slider">
           {imagesLink?.map((image, index) => (
             <div
-              style={{ width: "100%", height: "350px" }}
+              style={{ maxWidth: "100%", height: "350px" }}
               key={index}
               class="keen-slider__slide"
             >
@@ -114,7 +114,7 @@ const Slide = (props) => {
       {loaded && instanceRef.current && (
         <div className="dots">
           {[
-            ...Array(instanceRef.current.track.details.slides.length).keys()
+            ...Array(instanceRef.current.track.details.slides.length).keys(),
           ].map((idx) => {
             return (
               <button

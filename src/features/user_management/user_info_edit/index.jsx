@@ -156,6 +156,11 @@ function UserInfoEdit() {
         alignItems="center"
         spacing={3}
         padding={"20px 0px"}
+        sx={{
+          "@media(max-width:768px)": {
+            flexDirection: "column"
+          }
+        }}
       >
         <Grid item md={9}>
           <Box
@@ -163,18 +168,18 @@ function UserInfoEdit() {
             sx={{ display: "flex", flexDirection: "column", rowGap: 4 }}
           >
             <Grid container columnSpacing={3}>
-              <Grid item md={3}>
+              <Grid item md={3} xs={5}>
                 <Typography align="right">Tên đăng nhập</Typography>
               </Grid>
-              <Grid item md={9}>
+              <Grid item md={9} xs={7}>
                 <Typography>{me.userName}</Typography>
               </Grid>
             </Grid>
             <Grid container columnSpacing={3}>
-              <Grid item md={3}>
+              <Grid item md={3} xs={5}>
                 <Typography align="right">Mật khẩu</Typography>
               </Grid>
-              <Grid item md={9}>
+              <Grid item md={9} xs={7}>
                 <Button
                   onClick={handleOpenModalChangePassword}
                   variant="contained"
@@ -184,19 +189,19 @@ function UserInfoEdit() {
               </Grid>
             </Grid>
             <Grid container columnSpacing={3}>
-              <Grid item md={3}>
+              <Grid item md={3} xs={5}>
                 <Typography align="right">Email</Typography>
               </Grid>
-              <Grid item md={9}>
+              <Grid item md={9} xs={7}>
                 <Typography>{me?.email}</Typography>
               </Grid>
             </Grid>
 
             <Grid container columnSpacing={3}>
-              <Grid item md={3}>
+              <Grid item md={3} xs={5}>
                 <Typography align="right">Số điện thoại</Typography>
               </Grid>
-              <Grid item md={9}>
+              <Grid item md={9} xs={7} padding={"0 !important"}>
                 <Typography variant="h6">{me?.phoneNumber}</Typography>
                 <Button
                   variant="contained"
@@ -207,10 +212,10 @@ function UserInfoEdit() {
               </Grid>
             </Grid>
             <Grid container columnSpacing={3}>
-              <Grid item md={3}>
+              <Grid item md={3} xs={5}>
                 <Typography align="right"> Tên hiển thị</Typography>
               </Grid>
-              <Grid item md={9}>
+              <Grid item md={9} xs={7}>
                 <FormTextField
                   size="small"
                   control={control}
@@ -276,6 +281,23 @@ function UserInfoEdit() {
               </Button>
             </Box>
           </label>
+        </Grid>
+        <Grid
+          container
+          sx={{ width: "100%", padding: "2rem 0" }}
+          justifyContent="center"
+        >
+          <Grid item>
+            <LoadingButton
+              onClick={handleSubmit(onSubmit)}
+              color="success"
+              variant="contained"
+              disabled={!isDirty}
+              loading={loading.updateUser}
+            >
+              Lưu thay đổi
+            </LoadingButton>
+          </Grid>
         </Grid>
       </Grid>
     </Box>

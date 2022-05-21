@@ -1,19 +1,15 @@
+import { typography } from "@mui/system";
 import { hover } from "@testing-library/user-event/dist/hover";
 
 const style = () => {
   return {
-    fabove: {
-      margin: "1rem 10rem",
+    above: {
       textAlign: "center",
+      margin: "0 5rem",
     },
-    fabove_1: {
-      padding: "1rem 0",
-      backgroundColor: "#FFFFE0",
-      border: "1px solid #A9A9A9",
-      borderRadius: "5px",
-    },
-    fabove_2: {
-      marginTop: "1rem",
+
+    above_1: {
+      margin: "1rem",
       padding: "1rem 0",
       backgroundColor: "#FFFFE0",
       border: "5px dashed #A9A9A9",
@@ -21,18 +17,36 @@ const style = () => {
     },
     container: {
       borderTop: "1px solid #A9A9A9",
-      padding: "20px 25px",
-      marginTop: "1rem",
+      padding: "1rem",
     },
-    image: {
-      width: "10%",
-      padding: "0 0.5rem",
-      cursor: "pointer",
-      height: "50px",
-    },
+
     contentFooter: {
       lineHeight: "1.6",
-      padding: "0 1.5rem",
+      padding: "1rem 2rem",
+    },
+    image: {
+      maxHeight: "60px",
+      margin: "1rem 0.5rem",
+    },
+    //Mobile
+    "@media (max-width:768px)": {
+      above: {
+        margin: "0",
+      },
+      contentFooter: {
+        width: "100%",
+        textAlign: "center",
+      },
+    },
+    // Tablet
+    "@media (min-width:769px) and (max-width:1024px)": {
+      above: {
+        margin: "0",
+      },
+      contentFooter: {
+        width: "50%",
+        textAlign: "center",
+      },
     },
   };
 };

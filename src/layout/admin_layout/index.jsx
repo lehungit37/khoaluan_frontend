@@ -1,18 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-  Switch,
-  Route,
-  useRouteMatch,
-  Redirect,
-  useLocation
-} from "react-router-dom";
-import UserManagement from "../../features/admin/user_management";
-import { Button } from "@mui/material";
-import useAuthAdmin from "./../../hook/useAuthAdmin";
-import { useSelector, useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-import { setAuthToken } from "./../../api/axios_client";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect, Route, useLocation } from "react-router-dom";
 import { getInfo } from "../../app/user_slice";
+import { setAuthToken } from "./../../api/axios_client";
 
 function AdminLayout({ component: Component, ...rest }) {
   const { pathname } = useLocation();
@@ -34,8 +25,7 @@ function AdminLayout({ component: Component, ...rest }) {
 
   return (
     <>
-      <Redirect from={`admin`} to={`/admin/login`} />
-
+      {!token && !me.id && <Redirect from={`admin`} to={`/admin/login`} />}
       {token && me.id && <Redirect from="/admin/login" to={`${pathname}`} />}
       {!token && !me.id && (
         <>

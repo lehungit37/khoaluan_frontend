@@ -4,6 +4,7 @@ import LienHe from "../../features/user/lienhe";
 import Login from "../../features/user/login";
 import Register from "../../features/user/register";
 import Tutorial from "../../features/user/tutorial";
+import ForgetPassword from "../../features/user/forget_password";
 
 export const UserRouterLocal = [
   {
@@ -37,6 +38,11 @@ export const UserRouterLocal = [
     path: "/lien-he",
     name: "liên hệ",
     component: LienHe
+  },
+  {
+    path: "/quen-mat-khau",
+    name: "Quên mật khẩu",
+    component: ForgetPassword
   },
   {
     path: "/huong-dan",

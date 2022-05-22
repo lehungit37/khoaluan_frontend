@@ -5,6 +5,7 @@ import Login from "../../features/user/login";
 import Register from "../../features/user/register";
 import Tutorial from "../../features/user/tutorial";
 import ForgetPassword from "../../features/user/forget_password";
+import ModalRegister from "../../features/user/register";
 
 export const UserRouterLocal = [
   {

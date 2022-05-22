@@ -225,7 +225,7 @@ function UserInfoEdit() {
               </Grid>
             </Grid>
 
-            <Grid container sx={{ width: "100%" }} justifyContent="center">
+            {/* <Grid container sx={{ width: "100%" }} justifyContent="center">
               <Grid item>
                 <Button
                   onClick={handleSubmit(onSubmit)}
@@ -236,7 +236,7 @@ function UserInfoEdit() {
                   {loading.updateUser ? "Đang thay đổi" : " Lưu thay đổi"}
                 </Button>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
         </Grid>
         <Grid

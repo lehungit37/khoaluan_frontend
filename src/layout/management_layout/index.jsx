@@ -51,10 +51,10 @@ function ManagementLayout({ component: Component, ...rest }) {
         >
           <Toolbar>
             <MenuTop />
-            <PersistentDrawerLeft />
+            {/* <PersistentDrawerLeft />
             <Typography component="div" variant="h6">
               <Link to="/">Trang chủ</Link>
-            </Typography>
+            </Typography> */}
           </Toolbar>
         </AppBar>
 

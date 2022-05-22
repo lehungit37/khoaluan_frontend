@@ -1,9 +1,7 @@
 import React from "react";
-import { deletePost, getPostByUser } from "../../../../app/post_slice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal } from "../../../../app/modal_slice";
-import qs from "query-string";
+import { closeModal } from "../../../../../app/modal_slice";
 import {
   Button,
   Dialog,
@@ -14,23 +12,30 @@ import {
   Typography,
   Box
 } from "@mui/material";
+import qs from "query-string";
 import { LoadingButton } from "@mui/lab";
 import WarningIcon from "@mui/icons-material/Warning";
+import { deleteCategory, getData } from "../../category_slice";
 
-const DeleteModal = (props) => {
+const DeleteCategoryModal = (props) => {
   const { id } = props;
   const dispatch = useDispatch();
   const { open } = useSelector((state) => state.modalReducer);
-  const { loading, page, limit } = useSelector((state) => state.postReducer);
+  const { limit, page, loading } = useSelector(
+    (state) => state.categoryReducer
+  );
   const handleAcceptDeletePost = () => {
-    dispatch(deletePost(id))
+    dispatch(deleteCategory(id))
       .unwrap()
       .then(() => {
-        toast.success("Xóa bài viết thành công", {
+        toast.success("Xóa danh mục thành công", {
           position: "bottom-left",
           autoClose: 2000
         });
-        dispatch(getPostByUser({ param: qs.stringify({ limit, page }), id }));
+        const param = qs.stringify({ page, limit });
+
+        dispatch(getData(param));
+
         dispatch(closeModal());
       })
       .catch((error) => {
@@ -61,7 +66,7 @@ const DeleteModal = (props) => {
             }}
           >
             <WarningIcon color="error" sx={{ fontSize: "50px" }} />
-            <Typography>Bạn có muốn xóa bài viết không</Typography>
+            <Typography>Bạn có muốn xóa danh mục không</Typography>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -69,13 +74,12 @@ const DeleteModal = (props) => {
             Hủy
           </Button>
           <LoadingButton
-            loading={loading.deletePost}
             variant="contained"
             color="error"
             onClick={handleAcceptDeletePost}
             autoFocus
           >
-            Đồng ý
+            {loading.delete ? "Đang xóa" : "Đồng ý"}
           </LoadingButton>
         </DialogActions>
       </Dialog>
@@ -83,4 +87,4 @@ const DeleteModal = (props) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteCategoryModal;

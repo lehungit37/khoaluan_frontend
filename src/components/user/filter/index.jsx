@@ -1,23 +1,17 @@
-import * as React from "react";
-import { Box, Grid } from "@mui/material";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import TuneIcon from "@mui/icons-material/Tune";
-
-import style from "./style";
+import { Box, Grid, LinearProgress, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Drawer from "@mui/material/Drawer";
 import { makeStyles } from "@mui/styles";
-import SelectForm from "./../../../custom_fileds/hook-form/select_form/index";
+import * as React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { changePricePost } from "../../../features/user/dashboard/dashboard_slice";
+import {
+  changeDistrictId,
+  changePricePost
+} from "../../../features/user/dashboard/dashboard_slice";
+import SelectForm from "./../../../custom_fileds/hook-form/select_form/index";
+import style from "./style";
 
 const useStyles = makeStyles(style);
 
@@ -53,7 +47,9 @@ export default function FilterPost() {
   });
   const dispatch = useDispatch();
 
-  const { priceSelected } = useSelector((state) => state.dashboardReducer);
+  const { priceSelected, districtList, loading, postData } = useSelector(
+    (state) => state.dashboardReducer
+  );
 
   const classes = useStyles();
   const {
@@ -90,8 +86,18 @@ export default function FilterPost() {
     dispatch(changePricePost({ from, to, priceSelected: value.value }));
   };
 
+  const handleChangeDistrict = (value) => {
+    const code = value.value;
+
+    dispatch(changeDistrictId({ districtId: code }));
+  };
+
   const list = () => (
-    <Box sx={{ width: 350 }} role="presentation">
+    <Box sx={{ width: 350, padding: "10px" }} role="presentation">
+      {/* {loading.getData && <LinearProgress />} */}
+      <Typography variant="h5" sx={{ fontWeight: "700" }}>
+        Lọc bài viết
+      </Typography>
       <Grid container sx={{ width: "100%" }}>
         <Grid item sx={{ width: "100%" }}>
           <SelectForm
@@ -106,32 +112,24 @@ export default function FilterPost() {
             onChange={handleChangePrice}
           />
         </Grid>
+        <Grid item sx={{ width: "100%" }}>
+          <SelectForm
+            name="districtId"
+            label="Chọn Quận / Huyện"
+            control={control}
+            errors={errors}
+            options={districtList}
+            keyItem="code"
+            labelItem="name"
+            size="small"
+            onChange={handleChangeDistrict}
+          />
+        </Grid>
       </Grid>
-      {/* <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <Typography
+        variant="p"
+        sx={{ color: "red" }}
+      >{`Tìm thấy ${postData.length} kết quả`}</Typography>
     </Box>
   );
 

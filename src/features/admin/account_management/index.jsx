@@ -22,21 +22,35 @@ import AddIcon from "@mui/icons-material/Add";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { AccountTree } from "@mui/icons-material";
+import { getAllUser, unlockUser } from "../../../app/user_slice";
+import queryString from "query-string";
+import { lockUser } from "./../../../app/user_slice";
 
 const useStyles = makeStyles();
 function ManagementAccount() {
-  const { loading, postData, totalData, limit, page } = useSelector(
-    (state) => state.postReducer
-  );
   const classes = useStyles();
   const token = Cookies.get("token");
   const history = useHistory();
   const {
     api: {
-      getInfo: { me },
+      getInfo: { me }
     },
+    userList,
+    totalData,
+    limit,
+    page,
+    loading
   } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const query = { page, limit };
+    const param = queryString.stringify(query);
+
+    if (me.id) {
+      dispatch(getAllUser(param));
+    }
+  }, [page, limit, me]);
 
   const columnsTable = [
     {
@@ -45,7 +59,7 @@ function ManagementAccount() {
       accessor: "index",
       disableFilter: false,
       align: "left",
-      width: 30,
+      width: 30
     },
     {
       Header: "Ảnh đại diện",
@@ -54,7 +68,7 @@ function ManagementAccount() {
       disableFilter: false,
       align: "left",
       width: "auto",
-      width: 100,
+      width: 100
     },
     {
       Header: "Tên người dùng",
@@ -62,7 +76,7 @@ function ManagementAccount() {
       accessor: "name",
       disableFilter: false,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
     {
       Header: "Email",
@@ -70,7 +84,7 @@ function ManagementAccount() {
       accessor: "email",
       disableFilter: false,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
     {
       Header: "Số điện thoại",
@@ -78,15 +92,24 @@ function ManagementAccount() {
       accessor: "phoneNumber",
       disableFilter: false,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
+    {
+      Header: "Quyền ",
+      Footer: "Quyền ",
+      accessor: "permission",
+      disableFilter: false,
+      align: "left",
+      width: "auto"
+    },
+
     {
       Header: "Trạng thái",
       Footer: "Trạng thái",
       accessor: "isLock",
       disableFilter: true,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
     {
       Header: "Tùy chọn",
@@ -94,58 +117,63 @@ function ManagementAccount() {
       accessor: "action",
       disableFilter: false,
       align: "left",
-      width: 150,
-    },
+      width: 150
+    }
   ];
 
-  const datafetch = [
-    {
-      id: "1",
-      imageUrl: "Hello",
-      name: "Huy",
-      email: "qinqin2109@gmail.com",
-      phoneNumber: "0905705567",
-      isLock: true,
-      permission: "admin",
-    },
-    {
-      id: "1",
-      imageUrl: "Hello",
-      name: "Huy",
-      email: "qinqin2109@gmail.com",
-      phoneNumber: "0905705567",
-      isLock: true,
-      permission: "admin",
-    },
-    {
-      id: "1",
-      imageUrl: "Hello",
-      name: "Huy",
-      email: "qinqin2109@gmail.com",
-      phoneNumber: "0905705567",
-      isLock: true,
-      permission: "admin",
-    },
-  ];
+  const handleLockUser = (id) => {
+    dispatch(lockUser({ id }))
+      .unwrap()
+      .then(() => {
+        toast.success("Khóa tài khoản thành công", { position: "bottom-left" });
+      })
+      .catch((error) => {
+        toast.error(error.messages, { position: "bottom-left" });
+      });
+  };
 
-  const tableData = datafetch?.map((account, index) => {
+  const handleUnlockUser = (id) => {
+    dispatch(unlockUser({ id }))
+      .unwrap()
+      .then(() => {
+        toast.success("Mở khóa tài khoản thành công", {
+          position: "bottom-left"
+        });
+      })
+      .catch((error) => {
+        toast.error(error.messages, { position: "bottom-left" });
+      });
+  };
+
+  const handleChangePage = (page) => {
+    console.log(page);
+  };
+
+  const handleGetInfoEdit = (account) => {};
+  const tableData = userList?.map((account, index) => {
     return {
       index: index + 1,
-      imageUrl: <img src={account.imageUrl} />,
+      imageUrl: <img style={{ width: "100%" }} src={account.imageUrl} />,
       name: account.name,
       email: account.email,
       phoneNumber: account.phoneNumber,
       isLock: (
-        <Typography>{account.isLock ? "Đang hoạt động" : "Bị khóa"}</Typography>
+        <Typography>
+          {!account.isLock ? "Đang hoạt động" : "Bị khóa"}
+        </Typography>
       ),
       permission: account.permission,
       action: (
         <Box>
-          {account.status ? (
+          {account.isLock ? (
             <>
-              <Tooltip title="Khóa tài khoản" arrow placement="top-start">
+              <Tooltip title="Mở khóa" arrow placement="top-start">
                 <IconButton
-                // disabled={loading.hiddenPost}
+                  disabled={account.isDefault}
+                  onClick={() => {
+                    handleUnlockUser(account.id);
+                  }}
+                  // disabled={loading.hiddenPost}
                 >
                   <LockOutlinedIcon color="success" />
                 </IconButton>
@@ -153,25 +181,28 @@ function ManagementAccount() {
             </>
           ) : (
             <>
-              <Tooltip title="Mở khóa" arrow placement="top-start">
-                <IconButton>
+              <Tooltip title="Khóa tài khoản" arrow placement="top-start">
+                <IconButton
+                  onClick={() => {
+                    handleLockUser(account.id);
+                  }}
+                >
                   <LockOpenIcon color="primary" />
                 </IconButton>
               </Tooltip>
             </>
           )}
-          <Tooltip title="Sửa tài khoản" arrow placement="top-start">
-            <IconButton>
+          {/* <Tooltip title="Sửa tài khoản" arrow placement="top-start">
+            <IconButton
+              onClick={() => {
+                handleGetInfoEdit(account);
+              }}
+            >
               <ModeEditOutlineIcon color="success" />
             </IconButton>
-          </Tooltip>
-          <Tooltip title="Xóa tài khoản" arrow placement="top-start">
-            <IconButton>
-              <DeleteOutlineOutlinedIcon color="error" />
-            </IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </Box>
-      ),
+      )
     };
   });
 
@@ -182,16 +213,17 @@ function ManagementAccount() {
         className={classes.table}
         tableData={tableData}
         column={columnsTable}
-        limit={10}
-        page={1}
-        totalPage={10}
-        // handleChangePageTable={handleChangePage}
+        limit={limit}
+        page={page}
+        totalPage={Math.ceil(totalData / limit)}
+        handleChangePageTable={handleChangePage}
         isShowPagination={true}
         isShowFilter={false}
         hideCheckbox={true}
-        totalData={10}
+        totalData={totalData}
         size="small"
-        //   loading={loading.getPostByUser}
+        height="100vh"
+        loading={loading.getAll}
       />
     </>
   );

@@ -36,8 +36,8 @@ function ManagementAccount() {
   const history = useHistory();
   const {
     api: {
-      getInfo: { me },
-    },
+      getInfo: { me }
+    }
   } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
@@ -48,7 +48,7 @@ function ManagementAccount() {
       accessor: "index",
       disableFilter: false,
       align: "left",
-      width: 30,
+      width: 30
     },
     {
       Header: "Ảnh đại diện",
@@ -57,7 +57,7 @@ function ManagementAccount() {
       disableFilter: false,
       align: "left",
       width: "auto",
-      width: 100,
+      width: 100
     },
     {
       Header: "Tiêu đề",
@@ -65,7 +65,7 @@ function ManagementAccount() {
       accessor: "title",
       disableFilter: false,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
     {
       Header: "Giá",
@@ -73,7 +73,7 @@ function ManagementAccount() {
       accessor: "price",
       disableFilter: false,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
     {
       Header: "Ngày đăng",
@@ -81,7 +81,7 @@ function ManagementAccount() {
       accessor: "updatedAt",
       disableFilter: false,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
     {
       Header: "Trạng thái",
@@ -89,7 +89,7 @@ function ManagementAccount() {
       accessor: "status",
       disableFilter: false,
       align: "left",
-      width: "auto",
+      width: "auto"
     },
     {
       Header: "Tùy chọn",
@@ -97,8 +97,8 @@ function ManagementAccount() {
       accessor: "action",
       disableFilter: false,
       align: "left",
-      width: 150,
-    },
+      width: 150
+    }
   ];
 
   const datafetch = [
@@ -110,15 +110,15 @@ function ManagementAccount() {
       price: 20000,
       phoneNumber: "0905705567",
       status: true,
-      permission: "admin",
-    },
+      permission: "admin"
+    }
   ];
 
   const handleOpenModalDelete = (id) => {
     dispatch(
       openModal({
         dialogProps: { id },
-        dialogType: DeleteModal,
+        dialogType: DeleteModal
       })
     );
   };
@@ -163,7 +163,7 @@ function ManagementAccount() {
             </IconButton>
           </Tooltip>
         </Box>
-      ),
+      )
     };
   });
 
@@ -183,6 +183,7 @@ function ManagementAccount() {
         hideCheckbox={true}
         totalData={10}
         size="small"
+        height="100vh"
         //   loading={loading.getPostByUser}
       />
     </>

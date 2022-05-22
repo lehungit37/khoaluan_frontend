@@ -14,8 +14,8 @@ const postApi = {
     return axiosClient.get(`/post/get_info_edit/${id}`);
   },
 
-  getPostByUser: () => {
-    return axiosClient.get("/post/get_post_by_user");
+  getPostByUser: ({ id, param }) => {
+    return axiosClient.get(`/post/get_post_by_user/${id}?${param}`);
   },
   displayPost: (id) => {
     return axiosClient.get(`post/display_post/${id}`);

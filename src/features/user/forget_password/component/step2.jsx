@@ -19,7 +19,9 @@ const schema = yup
 
 const Step2ChangePassword = (props) => {
   const { handleNext } = props;
-  const { phoneNumber, loading } = useSelector((state) => state.userReducer);
+  const { phoneNumber, loading, hash } = useSelector(
+    (state) => state.userReducer
+  );
   const [errorText, setErrorText] = useState("");
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -46,7 +48,7 @@ const Step2ChangePassword = (props) => {
 
   const onSubmitPhoneNumber = (data) => {
     const { code } = data;
-    dispatch(veryfy({ phoneNumber, code }))
+    dispatch(veryfy({ phoneNumber, code, hash }))
       .unwrap()
       .then(() => {
         handleNext();

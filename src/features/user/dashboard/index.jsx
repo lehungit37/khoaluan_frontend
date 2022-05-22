@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Box } from "@mui/material";
 import MapPost from "./map";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostData } from "./dashboard_slice";
+import { getDistrict, getPostData } from "./dashboard_slice";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import FilterPost from "./../../../components/user/filter/index";
@@ -20,6 +20,10 @@ function Dashboard() {
       const { latitude, longitude } = postion.coords;
       setMyLocation({ lat: latitude, lng: longitude });
     });
+  }, []);
+
+  useEffect(() => {
+    dispatch(getDistrict());
   }, []);
 
   useEffect(() => {

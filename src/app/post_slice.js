@@ -66,7 +66,12 @@ const postSlice = createSlice({
       to: 99999999999
     }
   },
-  reducer: {},
+  reducers: {
+    changePagePost: (state, action) => {
+      const page = action.payload;
+      state.page = page;
+    }
+  },
   extraReducers: {
     [getInfoPost.pending]: (state) => {
       state.loading.getInfo = true;
@@ -162,5 +167,5 @@ const postSlice = createSlice({
   }
 });
 
-export const {} = postSlice.actions;
+export const { changePagePost } = postSlice.actions;
 export default postSlice.reducer;

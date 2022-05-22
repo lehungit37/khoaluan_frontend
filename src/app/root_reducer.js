@@ -7,6 +7,7 @@ import dashboardSlice from "../features/user/dashboard/dashboard_slice";
 import postSlice from "./post_slice";
 import modalSlice from "./modal_slice";
 import imageSlice from "./image";
+import categorySlice from "../features/admin/categories_management/category_slice";
 
 const reducer = combineReducers({
   detailRoomReducer: detailRoomSlice,
@@ -16,7 +17,8 @@ const reducer = combineReducers({
   dashboardReducer: dashboardSlice,
   postReducer: postSlice,
   modalReducer: modalSlice,
-  imageReducer: imageSlice
+  imageReducer: imageSlice,
+  categoryReducer: categorySlice
 });
 
 export default reducer;

@@ -61,7 +61,7 @@ const styles = () => {
       flex: 1,
       display: "flex",
       flexDirection: "column",
-      height: "81vh",
+      // height: "81vh",
       "& .MuiTablePagination-toolbar": {
         justifyContent: "center",
         padding: 0,

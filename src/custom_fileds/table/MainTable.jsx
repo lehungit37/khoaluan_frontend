@@ -38,7 +38,8 @@ function MainTable({
   totalData,
   handleChangePageTable,
   size = "medium",
-  loading
+  loading,
+  height
 }) {
   const classes = useStyles();
 
@@ -113,7 +114,11 @@ function MainTable({
   // };
 
   return (
-    <Paper className={classes.tablePage} elevation={0}>
+    <Paper
+      sx={{ height: height ? height : "81vh" }}
+      className={classes.tablePage}
+      elevation={0}
+    >
       {isShowFilter && (
         <div style={{ flexShrink: 0 }}>
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />

@@ -66,6 +66,24 @@ export const veryfy = createAsyncThunk(
   payloadCreator(userApi.veryfyCode)
 );
 
+export const changePhoneNumber = createAsyncThunk(
+  "user/changePhoneNumber",
+  payloadCreator(userApi.changePhoneNumber)
+);
+
+export const getAllUser = createAsyncThunk(
+  "admin/getAll",
+  payloadCreator(userApi.getAllUser)
+);
+
+export const lockUser = createAsyncThunk(
+  "admin/lockUser",
+  payloadCreator(userApi.lockuser)
+);
+export const unlockUser = createAsyncThunk(
+  "admin/unlockUser",
+  payloadCreator(userApi.unlockuser)
+);
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -85,14 +103,24 @@ const userSlice = createSlice({
       }
     },
 
+    hash: "",
+
     loading: {
       changePassword: false,
       changeAvatar: false,
       forgetPassword: false,
       updateUser: false,
       sendCode: false,
-      veryfy: false
+      veryfy: false,
+      getAll: false,
+      lockUser: false,
+      unlockUser: false
     },
+
+    userList: [],
+    page: 1,
+    limit: 10,
+    totalData: 0,
 
     phoneNumber: "",
 
@@ -235,7 +263,10 @@ const userSlice = createSlice({
     [sendCode.pending]: (state) => {
       state.loading.sendCode = true;
     },
-    [sendCode.fulfilled]: (state) => {
+    [sendCode.fulfilled]: (state, action) => {
+      const { messages } = action.payload;
+
+      state.hash = messages;
       state.loading.sendCode = false;
     },
     [sendCode.rejected]: (state) => {
@@ -250,6 +281,50 @@ const userSlice = createSlice({
     },
     [veryfy.rejected]: (state) => {
       state.loading.veryfy = false;
+    },
+
+    [changePhoneNumber.fulfilled]: (state, action) => {
+      const { phoneNumber } = action.payload;
+      const cloneMe = { ...state.api.getInfo.me };
+      cloneMe.phoneNumber = phoneNumber;
+      state.api.getInfo.me = cloneMe;
+    },
+
+    [getAllUser.pending]: (state) => {
+      state.loading.getAll = true;
+    },
+    [getAllUser.fulfilled]: (state, action) => {
+      const { data, totalData } = action.payload;
+      state.loading.getAll = false;
+
+      state.userList = data;
+      state.totalData = totalData;
+    },
+    [lockUser.pending]: (state) => {
+      state.loading.lockUser = true;
+    },
+    [lockUser.fulfilled]: (state, action) => {
+      const { id } = action.meta.arg;
+      const cloneData = [...state.userList];
+
+      const index = cloneData.findIndex((item) => item.id === id);
+
+      cloneData[index].isLock = true;
+      state.userList = cloneData;
+      state.loading.lockUser = false;
+    },
+    [unlockUser.pending]: (state) => {
+      state.loading.unlockUser = true;
+    },
+    [unlockUser.fulfilled]: (state, action) => {
+      const { id } = action.meta.arg;
+      const cloneData = [...state.userList];
+
+      const index = cloneData.findIndex((item) => item.id === id);
+
+      cloneData[index].isLock = false;
+      state.userList = cloneData;
+      state.loading.unlockUser = false;
     }
   }
 });

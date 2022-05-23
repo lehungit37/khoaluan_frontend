@@ -29,6 +29,14 @@ const postApi = {
 
   updatePost: ({ dataSend, id }) => {
     return axiosClient.put(`/post/update_post/${id}`, dataSend);
+  },
+
+  getPostByAdmin: (param) => {
+    return axiosClient.get(`/post/get_post_admin?${param}`);
+  },
+
+  getInfoDetailPost: (id) => {
+    return axiosClient.get(`/post/get_detail_post/${id}`);
   }
 };
 export default postApi;

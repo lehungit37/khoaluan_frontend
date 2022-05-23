@@ -11,8 +11,10 @@ import { closeModal } from "../../../../../app/modal_slice";
 import {
   addCategory,
   resetValueEditCategory,
-  updateCategory
+  updateCategory,
+  getData
 } from "./../../category_slice";
+import qs from "query-string";
 import { toast } from "react-toastify";
 
 const useStyles = makeStyles(style);
@@ -24,7 +26,9 @@ const AddUpdateCategory = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { open } = useSelector((state) => state.modalReducer);
-  const { infoEdit, loading } = useSelector((state) => state.categoryReducer);
+  const { infoEdit, loading, page, limit } = useSelector(
+    (state) => state.categoryReducer
+  );
   const defaultValues = useMemo(() => infoEdit, [infoEdit]);
   const {
     control,
@@ -53,6 +57,9 @@ const AddUpdateCategory = () => {
           });
           reset();
           dispatch(closeModal());
+          const param = qs.stringify({ page, limit });
+
+          dispatch(getData(param));
         })
         .catch((error) => {
           toast.error(error.messages, { position: "bottom-left" });

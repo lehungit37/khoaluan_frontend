@@ -25,6 +25,10 @@ export const deletePost = createAsyncThunk(
   "post/delete",
   payloadCreator(postApi.deletePost)
 );
+export const deletePostAdmin = createAsyncThunk(
+  "post/deleteAdmin",
+  payloadCreator(postApi.deletePost)
+);
 
 export const getInfoPostEdit = createAsyncThunk(
   "post/getInfoEdit",
@@ -34,6 +38,25 @@ export const getInfoPostEdit = createAsyncThunk(
 export const updatePost = createAsyncThunk(
   "post/update",
   payloadCreator(postApi.updatePost)
+);
+
+export const getPostByAdmin = createAsyncThunk(
+  "post/getPostAdmin",
+  payloadCreator(postApi.getPostByAdmin)
+);
+
+export const displayPostAdmin = createAsyncThunk(
+  "post/displayPostAdmin",
+  payloadCreator(postApi.displayPost)
+);
+export const hiddenPostAdmin = createAsyncThunk(
+  "post/hiddenPostAdmin",
+  payloadCreator(postApi.hiddenPost)
+);
+
+export const getInfoDetailPost = createAsyncThunk(
+  "post/getInfoDetail",
+  payloadCreator(postApi.getInfoDetailPost)
 );
 
 const postSlice = createSlice({
@@ -47,7 +70,12 @@ const postSlice = createSlice({
       displayPost: false,
       hiddenPost: false,
       deletePost: false,
-      updatePost: false
+      updatePost: false,
+      getPostByAdmin: false,
+
+      displayPost: false,
+      hiddenPost: false,
+      getInfoDetailPost: false
     },
     lastestPost: [],
     relatedPost: [],
@@ -56,7 +84,10 @@ const postSlice = createSlice({
       getPostByUser: false
     },
     postData: [],
+    postDataAdmin: [],
     totalData: 0,
+    totalDataAdmin: 0,
+    infoDetailPost: {},
     page: 1,
     limit: 15,
     filterByPrice: {
@@ -70,6 +101,9 @@ const postSlice = createSlice({
     changePagePost: (state, action) => {
       const page = action.payload;
       state.page = page;
+    },
+    resetInfoDetailPost: (state, action) => {
+      state.infoDetailPost = {};
     }
   },
   extraReducers: {
@@ -144,6 +178,21 @@ const postSlice = createSlice({
     [deletePost.rejected]: (state) => {
       state.loading.deletePost = false;
     },
+
+    [deletePostAdmin.pending]: (state) => {
+      state.loading.deletePost = true;
+    },
+    [deletePostAdmin.fulfilled]: (state, action) => {
+      const id = action.meta.arg;
+      const cloneData = [...state.postDataAdmin];
+      const indexPost = cloneData?.findIndex((post) => post.id === id);
+      cloneData.splice(indexPost, 1);
+      state.postDataAdmin = cloneData;
+      state.loading.deletePost = false;
+    },
+    [deletePostAdmin.rejected]: (state) => {
+      state.loading.deletePost = false;
+    },
     [getInfoPostEdit.pending]: (state) => {
       state.loading.getInfo = true;
     },
@@ -163,9 +212,65 @@ const postSlice = createSlice({
     },
     [updatePost.rejected]: (state) => {
       state.loading.updatePost = false;
+    },
+
+    [getPostByAdmin.pending]: (state) => {
+      state.loading.getPostByAdmin = true;
+    },
+    [getPostByAdmin.fulfilled]: (state, action) => {
+      const { data, totalData } = action.payload;
+
+      state.postDataAdmin = data;
+      state.totalDataAdmin = totalData;
+      state.loading.getPostByAdmin = false;
+    },
+
+    [displayPostAdmin.pending]: (state) => {
+      state.loading.displayPostAdmin = true;
+    },
+    [displayPostAdmin.fulfilled]: (state, action) => {
+      const id = action.meta.arg;
+      const indexPost = state.postDataAdmin?.findIndex(
+        (post) => post.id === id
+      );
+      state.postDataAdmin[indexPost].status = true;
+      state.loading.displayPostAdmin = false;
+    },
+    [displayPostAdmin.rejected]: (state) => {
+      state.loading.displayPostAdmin = false;
+    },
+    [hiddenPostAdmin.pending]: (state) => {
+      state.loading.hiddenPostAdmin = true;
+    },
+    [hiddenPostAdmin.fulfilled]: (state, action) => {
+      const id = action.meta.arg;
+      const indexPost = state.postDataAdmin?.findIndex(
+        (post) => post.id === id
+      );
+      state.postDataAdmin[indexPost].status = false;
+      state.loading.hiddenPostAdmin = false;
+    },
+    [hiddenPostAdmin.rejected]: (state) => {
+      state.loading.hiddenPostAdmin = false;
+    },
+
+    [getInfoDetailPost.pending]: (state, action) => {
+      state.loading.getInfoDetailPost = true;
+    },
+    [getInfoDetailPost.fulfilled]: (state, action) => {
+      const { name, infoPost } = action.payload;
+      console.log({ name, infoPost });
+      infoPost.name = name;
+
+      console.log(infoPost);
+      state.infoDetailPost = infoPost;
+      state.loading.getInfoDetailPost = false;
+    },
+    [getInfoDetailPost.rejected]: (state, action) => {
+      state.loading.getInfoDetailPost = false;
     }
   }
 });
 
-export const { changePagePost } = postSlice.actions;
+export const { changePagePost, resetInfoDetailPost } = postSlice.actions;
 export default postSlice.reducer;

@@ -1,8 +1,7 @@
 import ManagementPost from "../../features/admin/post_management";
 import ManagementAccount from "../../features/admin/account_management";
 import ManagementCategory from "../../features/admin/categories_management";
-import PermissionManagement from "./../../features/admin/permission_management/index";
-
+import ManagementPermission from "../../features/admin/permission_management";
 const AdminRouteLocal = [
   {
     path: "/quan-ly-bai-dang",
@@ -18,7 +17,7 @@ const AdminRouteLocal = [
   },
   {
     path: "/quan-ly-quyen",
-    component: PermissionManagement
+    component: ManagementPermission
   }
 ];
 

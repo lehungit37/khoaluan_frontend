@@ -1,34 +1,33 @@
-import React from "react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { userToken } from "../../../api/axios_client";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import Cookies from "js-cookie";
-import Loading from "../../../components/loading";
-import { Typography, Box, Tooltip, IconButton } from "@mui/material";
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
-import moment from "moment";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ClearIcon from "@mui/icons-material/Clear";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import LoadingButton from "@mui/lab/LoadingButton";
-import MainTable from "../../../custom_fileds/table/MainTable";
-import { makeStyles } from "@mui/styles";
-import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { AccountTree } from "@mui/icons-material";
-import { customMoney } from "../../../utils/helper";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import Cookies from "js-cookie";
+import moment from "moment";
+import qs from "query-string";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { openModal } from "../../../app/modal_slice";
+import {
+  changePagePost,
+  getPostByAdmin,
+  hiddenPost,
+  hiddenPostAdmin,
+  displayPostAdmin,
+  getInfoDetailPost
+} from "../../../app/post_slice";
+import Loading from "../../../components/loading";
+import MainTable from "../../../custom_fileds/table/MainTable";
+import { customMoney } from "../../../utils/helper";
 import DeleteModal from "./component/delete_modal";
-
+import ModalViewDetail from "./component/view_detail";
+import { toast } from "react-toastify";
 const useStyles = makeStyles();
 function ManagementAccount() {
-  const { loading, postData, totalData, limit, page } = useSelector(
+  const { loading, totalDataAdmin, limit, page, postDataAdmin } = useSelector(
     (state) => state.postReducer
   );
   const classes = useStyles();
@@ -40,6 +39,16 @@ function ManagementAccount() {
     }
   } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (me?.id) {
+      dispatch(getPostByAdmin(qs.stringify({ limit, page })));
+    }
+  }, [me, page, limit]);
+
+  const handleChangePage = (value) => {
+    dispatch(changePagePost(value));
+  };
 
   const columnsTable = [
     {
@@ -101,19 +110,6 @@ function ManagementAccount() {
     }
   ];
 
-  const datafetch = [
-    {
-      id: "1",
-      imagePost:
-        "https://cdn.sforum.vn/sforum/wp-content/uploads/2018/11/3-8.png",
-      title: "Huy",
-      price: 20000,
-      phoneNumber: "0905705567",
-      status: true,
-      permission: "admin"
-    }
-  ];
-
   const handleOpenModalDelete = (id) => {
     dispatch(
       openModal({
@@ -123,7 +119,43 @@ function ManagementAccount() {
     );
   };
 
-  const tableData = datafetch?.map((posts, index) => {
+  const hiddenPost = (post) => {
+    dispatch(hiddenPostAdmin(post?.id))
+      .unwrap()
+      .then(() => {
+        toast.success("Khóa bài viết thành công", { position: "bottom-left" });
+      })
+      .catch((error) => {
+        toast.error(error.messages, { position: "bottom-left" });
+      });
+  };
+
+  const displayPost = (post) => {
+    dispatch(displayPostAdmin(post.id))
+      .unwrap()
+      .then(() => {
+        toast.success("Mở khóa bài viết thành công", {
+          position: "bottom-left",
+          autoClose: 2000
+        });
+      })
+      .catch((error) => {
+        toast.error(error.messages, {
+          position: "bottom-left",
+          autoClose: 2000
+        });
+      });
+  };
+
+  const handleViewDetailPost = (id) => {
+    dispatch(getInfoDetailPost(id))
+      .unwrap()
+      .then(() => {
+        dispatch(openModal({ dialogProps: {}, dialogType: ModalViewDetail }));
+      });
+  };
+
+  const tableData = postDataAdmin?.map((posts, index) => {
     return {
       index: index + 1,
       imagePost: <img style={{ width: "100%" }} src={posts.imagePost} />,
@@ -133,11 +165,14 @@ function ManagementAccount() {
       status: posts.status ? "Đang hiển thị" : "Đã ẩn",
       action: (
         <Box>
-          {posts.status ? (
+          {!posts.status ? (
             <>
-              <Tooltip title="Khóa bài viết" arrow placement="top-start">
+              <Tooltip title="Mở khóa bài viết" arrow placement="top-start">
                 <IconButton
-                // disabled={loading.hiddenPost}
+                  onClick={() => {
+                    displayPost(posts);
+                  }}
+                  disabled={loading.hiddenPostAdmin}
                 >
                   <LockOutlinedIcon color="success" />
                 </IconButton>
@@ -145,15 +180,23 @@ function ManagementAccount() {
             </>
           ) : (
             <>
-              <Tooltip title="Mở khóa bài viết" arrow placement="top-start">
-                <IconButton>
+              <Tooltip title="Khóa bài viết" arrow placement="top-start">
+                <IconButton
+                  onClick={() => {
+                    hiddenPost(posts);
+                  }}
+                >
                   <LockOpenIcon color="primary" />
                 </IconButton>
               </Tooltip>
             </>
           )}
           <Tooltip title="Xem thông tin bài viết" arrow placement="top-start">
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                handleViewDetailPost(posts.id);
+              }}
+            >
               <RemoveRedEyeIcon color="primary" />
             </IconButton>
           </Tooltip>
@@ -174,17 +217,17 @@ function ManagementAccount() {
         className={classes.table}
         tableData={tableData}
         column={columnsTable}
-        limit={10}
-        page={1}
-        totalPage={10}
-        // handleChangePageTable={handleChangePage}
+        limit={limit}
+        page={page}
+        totalPage={Math.ceil(totalDataAdmin / limit)}
+        handleChangePageTable={handleChangePage}
         isShowPagination={true}
         isShowFilter={false}
         hideCheckbox={true}
-        totalData={10}
+        totalData={totalDataAdmin}
         size="small"
         height="100vh"
-        //   loading={loading.getPostByUser}
+        loading={loading.getPostByAdmin}
       />
     </>
   );

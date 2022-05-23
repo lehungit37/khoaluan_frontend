@@ -8,6 +8,7 @@ import postSlice from "./post_slice";
 import modalSlice from "./modal_slice";
 import imageSlice from "./image";
 import categorySlice from "../features/admin/categories_management/category_slice";
+import permissionSlice from "./permission_slice";
 
 const reducer = combineReducers({
   detailRoomReducer: detailRoomSlice,
@@ -18,7 +19,8 @@ const reducer = combineReducers({
   postReducer: postSlice,
   modalReducer: modalSlice,
   imageReducer: imageSlice,
-  categoryReducer: categorySlice
+  categoryReducer: categorySlice,
+  permissionReducer: permissionSlice
 });
 
 export default reducer;

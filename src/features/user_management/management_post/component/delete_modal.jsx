@@ -22,6 +22,11 @@ const DeleteModal = (props) => {
   const dispatch = useDispatch();
   const { open } = useSelector((state) => state.modalReducer);
   const { loading, page, limit } = useSelector((state) => state.postReducer);
+  const {
+    api: {
+      getInfo: { me }
+    }
+  } = useSelector((state) => state.userReducer);
   const handleAcceptDeletePost = () => {
     dispatch(deletePost(id))
       .unwrap()
@@ -30,7 +35,9 @@ const DeleteModal = (props) => {
           position: "bottom-left",
           autoClose: 2000
         });
-        dispatch(getPostByUser({ param: qs.stringify({ limit, page }), id }));
+        dispatch(
+          getPostByUser({ id: me.id, param: qs.stringify({ limit, page }) })
+        );
         dispatch(closeModal());
       })
       .catch((error) => {

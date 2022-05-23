@@ -8,7 +8,7 @@ import {
   Tooltip,
   IconButton,
   Alert,
-  AlertTitle,
+  AlertTitle
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import SelectForm from "../../../custom_fileds/hook-form/select_form";
@@ -21,7 +21,7 @@ import {
   getCategories,
   getRootLocation,
   addPost,
-  resetImagesLink,
+  resetImagesLink
 } from "./new_post_slice";
 import { useDispatch, useSelector } from "react-redux";
 import UploadImage from "./component/upload_image";
@@ -49,7 +49,7 @@ const schema = yup
       .number("Số tiền không hợp lệ, Vui lòng nhập lại")
       .min(1, "Số tiền không hợp lệ, Vui lòng nhập lại")
       .required("Vui lòng nhập số tiền muốn cho thuê"),
-    objectId: yup.string().required("Vui lòng chọn đối tượng cho thuê"),
+    objectId: yup.string().required("Vui lòng chọn đối tượng cho thuê")
   })
   .required();
 
@@ -60,13 +60,13 @@ function NewPost() {
   const [exactAddress, setExactAddress] = useState({
     cityId: formDataValue.cityId,
     districtId: formDataValue.districtId,
-    street: formDataValue.street,
+    street: formDataValue.street
   });
   const [getLocationAddress, setGetLocationAddress] = useState(false);
   const {
     api: {
-      getInfo: { me },
-    },
+      getInfo: { me }
+    }
   } = useSelector((state) => state.userReducer);
   let defaultValues = useMemo(() => formDataValue, [formDataValue]);
 
@@ -99,10 +99,10 @@ function NewPost() {
     getValues,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues,
+    defaultValues
   });
 
   useEffect(() => {
@@ -145,9 +145,9 @@ function NewPost() {
           imagesLink[0]?.url ||
           "http://localhost:3000/api/images/default-logo.png",
         rootLocation,
-        userId: me?.id,
+        userId: me?.id
       },
-      relatedImages: imagesLink || [],
+      relatedImages: imagesLink || []
     };
 
     setGetLocationAddress(true);
@@ -157,7 +157,7 @@ function NewPost() {
       .then(() => {
         toast.success("Thêm bài viết thành công", {
           position: "bottom-left",
-          autoClose: 2000,
+          autoClose: 2000
         });
         reset();
         setGetLocationAddress(false);
@@ -167,7 +167,7 @@ function NewPost() {
       .catch((error) => {
         toast.error(error.messages, {
           position: "bottom-left",
-          autoClose: 2000,
+          autoClose: 2000
         });
         setGetLocationAddress(false);
       });
@@ -202,7 +202,7 @@ function NewPost() {
         sx={{
           borderBottom: "1px solid #000",
           padding: "10px 0px",
-          marginBottom: "10px",
+          marginBottom: "10px"
         }}
       >
         Đăng tin mới
@@ -213,8 +213,8 @@ function NewPost() {
         sx={{
           "@media(max-width:768px)": {
             display: "flex",
-            flexDirection: "column",
-          },
+            flexDirection: "column"
+          }
         }}
       >
         <Grid item md={7}>
@@ -348,7 +348,7 @@ function NewPost() {
                     options={[
                       { id: "all", name: "Tất cả" },
                       { id: "male", name: "Nam" },
-                      { id: "female", name: "Nữ" },
+                      { id: "female", name: "Nữ" }
                     ]}
                     keyItem="id"
                     labelItem="name"
@@ -380,7 +380,7 @@ function NewPost() {
           sx={{
             paddingTop: "40px !important",
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "column"
           }}
         >
           <PostMap rootLocation={rootLocation} />

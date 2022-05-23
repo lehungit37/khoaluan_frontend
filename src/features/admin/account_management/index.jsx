@@ -22,7 +22,11 @@ import AddIcon from "@mui/icons-material/Add";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { AccountTree } from "@mui/icons-material";
-import { getAllUser, unlockUser } from "../../../app/user_slice";
+import {
+  getAllPermission,
+  getAllUser,
+  unlockUser
+} from "../../../app/user_slice";
 import queryString from "query-string";
 import { lockUser } from "./../../../app/user_slice";
 
@@ -39,7 +43,8 @@ function ManagementAccount() {
     totalData,
     limit,
     page,
-    loading
+    loading,
+    permissionList
   } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
@@ -51,6 +56,15 @@ function ManagementAccount() {
       dispatch(getAllUser(param));
     }
   }, [page, limit, me]);
+  useEffect(() => {
+    dispatch(getAllPermission());
+  }, []);
+
+  const renderNamePermission = (id) => {
+    const index = permissionList?.findIndex((item) => item.id == id);
+    console.log(permissionList?.[index]?.namePermission);
+    return permissionList[index]?.namePermission;
+  };
 
   const columnsTable = [
     {
@@ -68,7 +82,7 @@ function ManagementAccount() {
       disableFilter: false,
       align: "left",
       width: "auto",
-      width: 100
+      width: 75
     },
     {
       Header: "Tên người dùng",
@@ -162,7 +176,9 @@ function ManagementAccount() {
           {!account.isLock ? "Đang hoạt động" : "Bị khóa"}
         </Typography>
       ),
-      permission: account.permission,
+      permission: (
+        <Typography>{renderNamePermission(account.permissionId)}</Typography>
+      ),
       action: (
         <Box>
           {account.isLock ? (
@@ -173,9 +189,9 @@ function ManagementAccount() {
                   onClick={() => {
                     handleUnlockUser(account.id);
                   }}
-                  // disabled={loading.hiddenPost}
+                  color="success"
                 >
-                  <LockOutlinedIcon color="success" />
+                  <LockOutlinedIcon />
                 </IconButton>
               </Tooltip>
             </>
@@ -183,11 +199,13 @@ function ManagementAccount() {
             <>
               <Tooltip title="Khóa tài khoản" arrow placement="top-start">
                 <IconButton
+                  disabled={account.isDefault}
                   onClick={() => {
                     handleLockUser(account.id);
                   }}
+                  color="primary"
                 >
-                  <LockOpenIcon color="primary" />
+                  <LockOpenIcon />
                 </IconButton>
               </Tooltip>
             </>
@@ -206,7 +224,6 @@ function ManagementAccount() {
     };
   });
 
-  if (loading.getPostByUser) return <Loading />;
   return (
     <>
       <MainTable
@@ -223,7 +240,7 @@ function ManagementAccount() {
         totalData={totalData}
         size="small"
         height="100vh"
-        loading={loading.getAll}
+        loading={loading.getAll && loading.getPermission}
       />
     </>
   );

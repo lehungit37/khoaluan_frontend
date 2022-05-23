@@ -56,9 +56,13 @@ export const getInfoAdmin = createAsyncThunk(
   payloadCreator(userApi.getInfoAdmin)
 );
 
-export const sendCode = createAsyncThunk(
+export const sendCodeHasPhoneNumber = createAsyncThunk(
+  "user/sendCodeHasPhoneNumber",
+  payloadCreator(userApi.sendCodeHasPhoneNumber)
+);
+export const sendCodeNotHasPhoneNumber = createAsyncThunk(
   "user/sendCode",
-  payloadCreator(userApi.sendCode)
+  payloadCreator(userApi.sendCodeNotHasPhoneNumber)
 );
 
 export const veryfy = createAsyncThunk(
@@ -83,6 +87,11 @@ export const lockUser = createAsyncThunk(
 export const unlockUser = createAsyncThunk(
   "admin/unlockUser",
   payloadCreator(userApi.unlockuser)
+);
+
+export const getAllPermission = createAsyncThunk(
+  "permission/getAll",
+  payloadCreator(userApi.getPermission)
 );
 const userSlice = createSlice({
   name: "user",
@@ -114,10 +123,12 @@ const userSlice = createSlice({
       veryfy: false,
       getAll: false,
       lockUser: false,
-      unlockUser: false
+      unlockUser: false,
+      getPermission: false
     },
 
     userList: [],
+    permissionList: [],
     page: 1,
     limit: 10,
     totalData: 0,
@@ -260,16 +271,28 @@ const userSlice = createSlice({
       state.rejected.forgetPassword = true;
     },
 
-    [sendCode.pending]: (state) => {
+    [sendCodeHasPhoneNumber.pending]: (state) => {
       state.loading.sendCode = true;
     },
-    [sendCode.fulfilled]: (state, action) => {
+    [sendCodeHasPhoneNumber.fulfilled]: (state, action) => {
       const { messages } = action.payload;
 
       state.hash = messages;
       state.loading.sendCode = false;
     },
-    [sendCode.rejected]: (state) => {
+    [sendCodeHasPhoneNumber.rejected]: (state) => {
+      state.loading.sendCode = false;
+    },
+    [sendCodeNotHasPhoneNumber.pending]: (state) => {
+      state.loading.sendCode = true;
+    },
+    [sendCodeNotHasPhoneNumber.fulfilled]: (state, action) => {
+      const { messages } = action.payload;
+
+      state.hash = messages;
+      state.loading.sendCode = false;
+    },
+    [sendCodeNotHasPhoneNumber.rejected]: (state) => {
       state.loading.sendCode = false;
     },
 
@@ -325,6 +348,15 @@ const userSlice = createSlice({
       cloneData[index].isLock = false;
       state.userList = cloneData;
       state.loading.unlockUser = false;
+    },
+
+    [getAllPermission.pending]: (state) => {
+      state.loading.getPermission = true;
+    },
+    [getAllPermission.fulfilled]: (state, action) => {
+      const data = action.payload;
+      state.loading.getPermission = false;
+      state.permissionList = data;
     }
   }
 });

@@ -62,7 +62,7 @@ const newPostSlice = createSlice({
     rootLocation: "",
     categories: []
   },
-  reducer: {
+  reducers: {
     resetImagesLink: (state) => {
       state.imagesLink = [];
     }

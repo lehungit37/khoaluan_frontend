@@ -59,7 +59,9 @@ const categorySlice = createSlice({
     [addCategory.fulfilled]: (state, action) => {
       const newDataItem = action.payload;
       const cloneData = [...state.categoryList];
-      cloneData.unshift(newDataItem);
+      cloneData.push(newDataItem);
+
+      console.log(cloneData);
       state.categoryList = cloneData;
       state.loading.add = false;
     },

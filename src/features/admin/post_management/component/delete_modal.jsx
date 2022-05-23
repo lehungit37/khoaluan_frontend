@@ -1,5 +1,5 @@
 import React from "react";
-import { deletePost } from "../../../../app/post_slice";
+import { deletePostAdmin } from "../../../../app/post_slice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../../../app/modal_slice";
@@ -22,7 +22,7 @@ const DeleteModal = (props) => {
   const { open } = useSelector((state) => state.modalReducer);
   const { loading } = useSelector((state) => state.postReducer);
   const handleAcceptDeletePost = () => {
-    dispatch(deletePost(id))
+    dispatch(deletePostAdmin(id))
       .unwrap()
       .then(() => {
         toast.success("Xóa bài viết thành công", {

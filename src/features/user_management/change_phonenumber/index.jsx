@@ -27,7 +27,10 @@ import FormTextField from "../../../custom_fileds/hook-form/text_field";
 import { login, veryfy } from "../../../app/user_slice";
 import color from "../../../constant/color";
 import { closeModal } from "../../../app/modal_slice";
-import { sendCode, changePhoneNumber } from "./../../../app/user_slice";
+import {
+  sendCodeNotHasPhoneNumber,
+  changePhoneNumber
+} from "./../../../app/user_slice";
 
 const schema = yup.object({
   phoneNumber: yup
@@ -85,7 +88,7 @@ function ModalChangePhoneNumber() {
   const onSubmitFormPhone = (data) => {
     const { phoneNumber, newPhoneNumber } = data;
     setLoading(true);
-    dispatch(sendCode(newPhoneNumber))
+    dispatch(sendCodeNotHasPhoneNumber(newPhoneNumber))
       .unwrap()
       .then(() => {
         handleNext();

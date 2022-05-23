@@ -35,8 +35,13 @@ const userApi = {
     return axiosClient.get("/user/admin/get_info");
   },
 
-  sendCode: (phoneNumber) => {
-    return axiosClient.get(`/auth/send_code?phoneNumber=${phoneNumber}`);
+  sendCodeHasPhoneNumber: (phoneNumber) => {
+    return axiosClient.get(
+      `/auth/send_code_current?phoneNumber=${phoneNumber}`
+    );
+  },
+  sendCodeNotHasPhoneNumber: (phoneNumber) => {
+    return axiosClient.get(`/auth/send_code_new?phoneNumber=${phoneNumber}`);
   },
 
   veryfyCode: ({ phoneNumber, code, hash }) => {
@@ -64,6 +69,10 @@ const userApi = {
   },
   unlockuser: ({ id }) => {
     return axiosClient.get(`/user/unlock_user/${id}`);
+  },
+
+  getPermission: () => {
+    return axiosClient.get("/permission/get_all");
   }
 };
 

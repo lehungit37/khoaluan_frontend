@@ -8,7 +8,11 @@ import { useForm } from "react-hook-form";
 import style from "./style";
 import FormTextField from "../../../../custom_fileds/hook-form/text_field";
 import { useDispatch, useSelector } from "react-redux";
-import { sendCode, setPhoneNumber } from "./../../../../app/user_slice";
+import {
+  sendCodeHasPhoneNumber,
+  sendCodeNotHasPhoneNumber,
+  setPhoneNumber
+} from "./../../../../app/user_slice";
 import { toast } from "react-toastify";
 import LoadingButton from "@mui/lab/LoadingButton";
 
@@ -47,18 +51,16 @@ const Step1ChangePassword = (props) => {
   });
 
   const onSubmitPhoneNumber = (data) => {
-    // const { phoneNumber } = data;
-    // dispatch(sendCode(phoneNumber))
-    //   .unwrap()
-    //   .then(() => {
-    //     dispatch(setPhoneNumber(phoneNumber));
-    //     handleNext();
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error?.messages, { position: "bottom-left" });
-    //   });
+    const { phoneNumber } = data;
+    dispatch(sendCodeNotHasPhoneNumber(phoneNumber))
+      .unwrap()
+      .then(() => {
+        dispatch(setPhoneNumber(phoneNumber));
         handleNext();
-
+      })
+      .catch((error) => {
+        toast.error(error?.messages, { position: "bottom-left" });
+      });
   };
 
   return (
@@ -66,20 +68,18 @@ const Step1ChangePassword = (props) => {
       className={classes.formBox}
       component="form"
       onSubmit={handleSubmit(onSubmitPhoneNumber)}
-      
     >
-      <Box sx={{textAlign:"center"}}>
-      <Typography variant="h5" component="h2" margin="15px 0">
-      NHẬP SỐ ĐIỆN THOẠI
-      </Typography>
-      <FormTextField
-        control={control}
-        name={"phoneNumber"}
-        label="Số điện thoại"
-        size="small"
-      />
+      <Box sx={{ textAlign: "center" }}>
+        <Typography variant="h5" margin="15px 0">
+          NHẬP SỐ ĐIỆN THOẠI
+        </Typography>
+        <FormTextField
+          control={control}
+          name={"phoneNumber"}
+          label="Số điện thoại"
+          size="small"
+        />
       </Box>
-
 
       <Box sx={{ textAlign: "center", marginTop: "15px" }}>
         <Button

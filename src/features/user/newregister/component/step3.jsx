@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Typography,Grid } from "@mui/material";
+import { Box, Button, Typography, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,22 +11,39 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../../../app/modal_slice";
 import { forgetPassword } from "../../../../app/user_slice";
+import { register } from "./../../../../app/user_slice";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(style);
 const schema = yup
   .object({
-    newPassword: yup.string().required("Vui lòng nhập mật khẩu mới"),
-    confirmPassword: yup.string().required("Vui lòng nhập xác nhận mật khẩu")
+    name: yup.string().required("Vui lòng nhập tên"),
+    email: yup
+      .string()
+      .matches(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Định dạng email không đúng"
+      )
+      .required("Vui lòng nhập email"),
+    userName: yup.string().required("Vui lòng nhập tên đăng nhập"),
+    password: yup.string().required("Vui lòng nhập mật khẩu")
   })
   .required();
 
 const Step3ChangePassword = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { handleNext, setOpen } = props;
 
-  const { phoneNumber, loading } = useSelector((state) => state.userReducer);
+  const {
+    phoneNumber,
+    api: {
+      auth: {
+        register: { status }
+      }
+    }
+  } = useSelector((state) => state.userReducer);
 
-  const [errorText, setErrorText] = useState("");
   const classes = useStyles();
 
   const {
@@ -37,90 +54,76 @@ const Step3ChangePassword = (props) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      newPassword: "",
-      confirmPassword: ""
+      name: "",
+      email: "",
+      userName: "",
+      password: ""
     }
   });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setErrorText("");
-    }, 4000);
-
-    return () => clearTimeout(timer);
-  });
-
-  const onSubmitChangePassword = (data) => {
-    const { newPassword, confirmPassword } = data;
-
-    if (newPassword == confirmPassword) {
-      dispatch(forgetPassword({ phoneNumber, newPassword }))
-        .unwrap()
-        .then(() => {
-          toast.success("Thay đổi mật khẩu thành công", {
-            position: "bottom-left"
-          });
-
-          reset();
-          setOpen(false);
-        })
-        .catch((error) => {
-          toast.error(error.messages, { position: "bottom-left" });
-        });
-    } else {
-      setErrorText("Xác nhận mật khẩu ko trùng");
-    }
+  const onSubmit = (data) => {
+    data.phoneNumber = phoneNumber;
+    dispatch(register(data))
+      .unwrap()
+      .then(() => {
+        toast.success("Đăng ký thành công", { position: "bottom-left" });
+        history.push("/login");
+        reset();
+      })
+      .catch((error) => {
+        toast.error(error.messages, { position: "bottom-left" });
+      });
   };
 
   return (
     <Box
       className={classes.formBox}
       component="form"
-      onSubmit={handleSubmit(onSubmitChangePassword)}
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <Grid container flexDirection="column" rowSpacing=  {2}>
+      <Grid container flexDirection="column" rowSpacing={2}>
         <Grid item>
-        <FormTextField
-              control={control}
-              name={"name"}
-              label="Họ và tên"
-              size="small"
-            />
+          <FormTextField
+            control={control}
+            name={"name"}
+            label="Họ và tên"
+            size="small"
+          />
         </Grid>
         <Grid item>
-        <FormTextField
-              control={control}
-              name={"email"}
-              label="Email"
-              size="small"
-            />
+          <FormTextField
+            control={control}
+            name={"email"}
+            label="Email"
+            size="small"
+          />
         </Grid>
         <Grid item>
-        <FormTextField
-              control={control}
-              name={"userName"}
-              label="Tên đăng nhập"
-              size="small"
-            />
+          <FormTextField
+            control={control}
+            name={"userName"}
+            label="Tên đăng nhập"
+            size="small"
+          />
         </Grid>
         <Grid item>
-        <FormTextField
-              control={control}
-              name={"password"}
-              label="Mật khẩu"
-              size="small"
-              type="password"
-            />
-          </Grid>
+          <FormTextField
+            control={control}
+            name={"password"}
+            label="Mật khẩu"
+            size="small"
+            type="password"
+          />
+        </Grid>
       </Grid>
-      {/* {errorText && <Typography sx={{ color: "red" }}>{errorText}</Typography>} */}
+
       <Box sx={{ textAlign: "center", marginTop: "15px" }}>
         <Button
-          onClick={handleSubmit(onSubmitChangePassword)}
+          onClick={handleSubmit(onSubmit)}
           variant="contained"
-          disabled={loading.forgetPassword}
+          disabled={status == "pending"}
         >
-          {loading.forgetPassword ? "Đang Đăng ký" : " Đăng ký"}
+          {status == "pending" ? "Đang Đăng ký" : " Đăng ký"}
         </Button>
       </Box>
     </Box>

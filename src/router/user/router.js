@@ -2,10 +2,10 @@ import Dashboard from "../../features/user/dashboard";
 import RoomDetail from "../../features/user/detail_room";
 import LienHe from "../../features/user/lienhe";
 import Login from "../../features/user/login";
-import Register from "../../features/user/register";
+import Register from "../../features/user/newregister";
 import Tutorial from "../../features/user/tutorial";
 import ForgetPassword from "../../features/user/forget_password";
-import ModalRegister from "../../features/user/register";
+// import ModalRegister from "../../features/user/register";
 
 export const UserRouterLocal = [
   {

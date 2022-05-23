@@ -2,13 +2,9 @@ import color from "../../../constant/color";
 
 const style = () => {
   return {
-    boxModal: {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
+    box: {
       width: 400,
-      backgroundColor: "#fff",
+      backgroundColor: color.GRAY,
       padding: "20px",
       borderRadius: "10px"
     },

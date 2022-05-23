@@ -15,6 +15,7 @@ const userApi = {
   getInfo: () => {
     return axiosClient.get("/user/get_info");
   },
+
   register: (data) => {
     return axiosClient.post("/auth/register", data);
   },
@@ -57,6 +58,7 @@ const userApi = {
   changePhoneNumber: ({ phoneNumber, id }) => {
     return axiosClient.post("/user/change_phoneNumber", { phoneNumber, id });
   },
+
   getInfoAdmin: () => {
     return axiosClient.get("/user/admin/get_info");
   },

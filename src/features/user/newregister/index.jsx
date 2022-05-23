@@ -33,7 +33,6 @@ const useStyles = makeStyles(style);
 const steps = ["Nhập SDT", "Xác thực ", "Thông tin"];
 
 export default function Register(props) {
-  
   const classes = useStyles();
   const history = useHistory();
   const { loading, rejected } = useSelector((state) => state.userReducer);
@@ -97,45 +96,53 @@ export default function Register(props) {
   };
 
   return (
-    <div>
-      
-        <Box className={classes.boxModal}>
-          <Stepper activeStep={activeStep}>
-            {steps.map((label, index) => {
-              const stepProps = {};
-              const labelProps = {};
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+        margin: "30px 0px"
+      }}
+    >
+      <Box className={classes.box}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
 
-              if (isStepSkipped(index)) {
-                stepProps.completed = false;
-              }
-              return (
-                <Step key={label} {...stepProps}>
-                  <StepLabel {...labelProps}>{label}</StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
 
-          <React.Fragment>
-            <Grid
-              container
-              justifyContent="center"
-              alignItems="center"
-              sx={{ paddingTop: "0%", marginTop: "15px" }}
-            >
-              <Grid item className={classes.formItem}>
-                {renderModalStep()}
-              </Grid>
+        <React.Fragment>
+          <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+            sx={{ paddingTop: "0%", marginTop: "15px" }}
+          >
+            <Grid item className={classes.formItem}>
+              {renderModalStep()}
             </Grid>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-              {activeStep !== 0 && (
-                <Button color="inherit" onClick={handleBack}>
-                  Back
-                </Button>
-              )}
-            </Box>
-          </React.Fragment>
-        </Box>
+          </Grid>
+          <Box sx={{ display: "flex", flexDirection: "row" }}>
+            {activeStep !== 0 && (
+              <Button color="inherit" onClick={handleBack}>
+                Back
+              </Button>
+            )}
+          </Box>
+        </React.Fragment>
+      </Box>
     </div>
   );
 }

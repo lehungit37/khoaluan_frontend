@@ -23,8 +23,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { AccountTree } from "@mui/icons-material";
 import {
+  changePage,
   getAllPermission,
   getAllUser,
+  resetpage,
   unlockUser
 } from "../../../app/user_slice";
 import queryString from "query-string";
@@ -159,11 +161,16 @@ function ManagementAccount() {
       });
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetpage());
+    };
+  }, []);
+
   const handleChangePage = (page) => {
-    console.log(page);
+    dispatch(changePage(page));
   };
 
-  const handleGetInfoEdit = (account) => {};
   const tableData = userList?.map((account, index) => {
     return {
       index: index + 1,

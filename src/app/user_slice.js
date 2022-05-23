@@ -140,6 +140,13 @@ const userSlice = createSlice({
     }
   },
   reducers: {
+    changePage: (state, action) => {
+      const page = action.payload;
+      state.page = page;
+    },
+    resetPage: (state) => {
+      state.page = 1;
+    },
     setPhoneNumber: (state, action) => {
       const data = action.payload;
 
@@ -361,5 +368,6 @@ const userSlice = createSlice({
   }
 });
 
-export const { setPhoneNumber, resetPhoneNumber } = userSlice.actions;
+export const { setPhoneNumber, resetPhoneNumber, changePage, resetpage } =
+  userSlice.actions;
 export default userSlice.reducer;

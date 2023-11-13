@@ -1,3 +1,4 @@
+import { AltRouteOutlined } from "@mui/icons-material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FiberManualRecordSharpIcon from "@mui/icons-material/FiberManualRecordSharp";
@@ -16,7 +17,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import moment from "moment";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getInfoPost } from "../../../app/post_slice";
@@ -46,10 +47,19 @@ function RoomDetail() {
   const { id } = useParams();
   const { loading, infoPost, infoAuthorPost, lastestPost, relatedPost } =
     useSelector((state) => state.postReducer);
+
+  const [myLocation, setMyLocation] = useState({ lat: 0, lng: 0 });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getInfoPost(id));
   }, [id]);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((postion) => {
+      const { latitude, longitude } = postion.coords;
+      setMyLocation({ lat: latitude, lng: longitude });
+    });
+  }, []);
 
   if (loading.getInfo) {
     return <Loading />;
@@ -190,6 +200,19 @@ function RoomDetail() {
               <Typography sx={{ marginBottom: "10px" }}>
                 Địa chỉ: {infoPost.address}
               </Typography>
+              <Button
+                onClick={() => {
+                  window.open(
+                    // `https://www.google.com/maps/place/${infoPost.rootLocation}`,
+                    `https://www.google.com/maps/dir/${myLocation.lat},${myLocation.lng}/${infoPost.rootLocation}/@${infoPost.rootLocation}z`,
+                    "_blank"
+                  );
+                }}
+                startIcon={<AltRouteOutlined />}
+              >
+                Chỉ đường
+              </Button>
+
               <Box sx={{ height: "350px" }}>
                 <PostMap rootLocation={infoPost.rootLocation} />
               </Box>

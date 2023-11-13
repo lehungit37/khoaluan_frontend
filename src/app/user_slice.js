@@ -100,16 +100,16 @@ const userSlice = createSlice({
       auth: {
         login: {
           status: "",
-          token: ""
+          token: "",
         },
         register: {
-          status: ""
-        }
+          status: "",
+        },
       },
       getInfo: {
         status: "",
-        me: {}
-      }
+        me: {},
+      },
     },
 
     hash: "",
@@ -124,7 +124,7 @@ const userSlice = createSlice({
       getAll: false,
       lockUser: false,
       unlockUser: false,
-      getPermission: false
+      getPermission: false,
     },
 
     userList: [],
@@ -136,8 +136,8 @@ const userSlice = createSlice({
     phoneNumber: "",
 
     rejected: {
-      forgetPassword: false
-    }
+      forgetPassword: false,
+    },
   },
   reducers: {
     changePage: (state, action) => {
@@ -156,7 +156,7 @@ const userSlice = createSlice({
     },
     resetPhoneNumber: (state) => {
       state.phoneNumber = "";
-    }
+    },
   },
   extraReducers: {
     [login.pending]: (state) => {
@@ -364,10 +364,10 @@ const userSlice = createSlice({
       const data = action.payload;
       state.loading.getPermission = false;
       state.permissionList = data;
-    }
-  }
+    },
+  },
 });
 
-export const { setPhoneNumber, resetPhoneNumber, changePage, resetpage } =
+export const { setPhoneNumber, resetPhoneNumber, changePage, resetPage } =
   userSlice.actions;
 export default userSlice.reducer;

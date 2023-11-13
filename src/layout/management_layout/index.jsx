@@ -20,11 +20,12 @@ import PersistentDrawerLeft from "../../components/user_management/menu/repon";
 const drawerWidth = 240;
 function ManagementLayout({ component: Component, ...rest }) {
   const token = Cookies.get("token");
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const pathname = location.pathname;
   const {
     api: {
-      getInfo: { me }
-    }
+      getInfo: { me },
+    },
   } = useSelector((state) => state.userReducer);
 
   const modalReducer = useSelector((state) => state.modalReducer);
@@ -46,7 +47,7 @@ function ManagementLayout({ component: Component, ...rest }) {
         <AppBar
           position="fixed"
           sx={{
-            zIndex: (theme) => theme.zIndex.drawer + 1
+            zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
         >
           <Toolbar>
@@ -66,11 +67,11 @@ function ManagementLayout({ component: Component, ...rest }) {
 
             [`& .MuiDrawer-paper`]: {
               width: drawerWidth,
-              boxSizing: "border-box"
+              boxSizing: "border-box",
             },
             "@media(max-width:768px)": {
-              display: "none"
-            }
+              display: "none",
+            },
           }}
         >
           <Toolbar />
@@ -81,7 +82,7 @@ function ManagementLayout({ component: Component, ...rest }) {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 3
+            p: 3,
           }}
         >
           <Toolbar />

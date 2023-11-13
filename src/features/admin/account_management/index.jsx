@@ -26,8 +26,8 @@ import {
   changePage,
   getAllPermission,
   getAllUser,
-  resetpage,
-  unlockUser
+  resetPage,
+  unlockUser,
 } from "../../../app/user_slice";
 import queryString from "query-string";
 import { lockUser } from "./../../../app/user_slice";
@@ -39,14 +39,14 @@ function ManagementAccount() {
   const history = useHistory();
   const {
     api: {
-      getInfo: { me }
+      getInfo: { me },
     },
     userList,
     totalData,
     limit,
     page,
     loading,
-    permissionList
+    permissionList,
   } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
 
@@ -75,7 +75,7 @@ function ManagementAccount() {
       accessor: "index",
       disableFilter: false,
       align: "left",
-      width: 30
+      width: 30,
     },
     {
       Header: "Ảnh đại diện",
@@ -84,7 +84,7 @@ function ManagementAccount() {
       disableFilter: false,
       align: "left",
       width: "auto",
-      width: 75
+      width: 75,
     },
     {
       Header: "Tên người dùng",
@@ -92,7 +92,7 @@ function ManagementAccount() {
       accessor: "name",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Email",
@@ -100,7 +100,7 @@ function ManagementAccount() {
       accessor: "email",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Số điện thoại",
@@ -108,7 +108,7 @@ function ManagementAccount() {
       accessor: "phoneNumber",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Quyền ",
@@ -116,7 +116,7 @@ function ManagementAccount() {
       accessor: "permission",
       disableFilter: false,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
 
     {
@@ -125,7 +125,7 @@ function ManagementAccount() {
       accessor: "isLock",
       disableFilter: true,
       align: "left",
-      width: "auto"
+      width: "auto",
     },
     {
       Header: "Tùy chọn",
@@ -133,8 +133,8 @@ function ManagementAccount() {
       accessor: "action",
       disableFilter: false,
       align: "left",
-      width: 150
-    }
+      width: 150,
+    },
   ];
 
   const handleLockUser = (id) => {
@@ -153,7 +153,7 @@ function ManagementAccount() {
       .unwrap()
       .then(() => {
         toast.success("Mở khóa tài khoản thành công", {
-          position: "bottom-left"
+          position: "bottom-left",
         });
       })
       .catch((error) => {
@@ -163,7 +163,7 @@ function ManagementAccount() {
 
   useEffect(() => {
     return () => {
-      dispatch(resetpage());
+      dispatch(resetPage());
     };
   }, []);
 
@@ -227,7 +227,7 @@ function ManagementAccount() {
             </IconButton>
           </Tooltip> */}
         </Box>
-      )
+      ),
     };
   });
 

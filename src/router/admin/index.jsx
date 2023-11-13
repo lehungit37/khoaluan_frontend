@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import AdminRouteLocal from "./router";
 import LoginAdmin from "../../features/admin/login";
 

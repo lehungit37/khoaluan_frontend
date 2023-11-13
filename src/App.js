@@ -2,7 +2,7 @@ import "./App.css";
 import { ThemeProvider } from "@mui/material/styles";
 import { Button, Typography } from "@mui/material";
 import theme from "./theme";
-import { Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import UserLayout from "./layout/user_layout";
 import UserMainRouter from "./router/user";
 import AdminLayout from "./layout/admin_layout";

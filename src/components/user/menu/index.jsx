@@ -24,7 +24,6 @@ import color from "../../../constant/color";
 import { getMenu } from "../../../app/menu_slice";
 import { stringToSlug } from "../../../utils/helper";
 import ReponMenu from "./repon";
-import AppsIcon from "@mui/icons-material/Apps";
 
 const useStyles = makeStyles(style);
 
@@ -81,30 +80,12 @@ function Menu() {
       icon: <AccountCircleOutlinedIcon />,
       path: "/quan-ly/thong-tin-ca-nhan",
     },
-    {
-      title: "Tin đã lưu",
-      icon: <FavoriteOutlinedIcon />,
-    },
+    // {
+    //   title: "Tin đã lưu",
+    //   icon: <FavoriteOutlinedIcon />,
+    // },
   ];
 
-  const renderMenuItem = () => {
-    return (
-      <>
-        {accountManagementList?.map((item, key) => {
-          return (
-            <MenuItem onClick={() => handleClose(item.path)} key={key}>
-              {item.icon}
-              {item.title}
-            </MenuItem>
-          );
-        })}
-        <MenuItem onClick={handleLogout}>
-          <LogoutOutlinedIcon />
-          Đăng xuất
-        </MenuItem>
-      </>
-    );
-  };
   return (
     <>
       <Box className={classes.root}>
@@ -132,16 +113,11 @@ function Menu() {
                       <Grid
                         item
                         display="flex"
-                        // flexDirection="column"
-                        // spacing={2}
                         onClick={() =>
                           history.push("/quan-ly/thong-tin-ca-nhan")
                         }
                       >
-                        <Typography
-                          variant="p"
-                          // sx={{ marginBottom: "5px !important" }}
-                        >
+                        <Typography variant="p">
                           Xin chào,
                           <Typography
                             className={classes.nameUser}
@@ -150,15 +126,6 @@ function Menu() {
                             {me?.name}
                           </Typography>
                         </Typography>
-                        {/* <Typography variant="p">
-                          Số dư:
-                          <Typography
-                            className={classes.nameUser}
-                            variant="span"
-                          >
-                            {customMoney(me?.money)}
-                          </Typography>
-                        </Typography> */}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -179,7 +146,21 @@ function Menu() {
                       open={openModelMenu}
                       onClose={handleClose}
                     >
-                      {renderMenuItem()}
+                      {accountManagementList?.map((item, key) => {
+                        return (
+                          <MenuItem
+                            onClick={() => handleClose(item.path)}
+                            key={key}
+                          >
+                            {item.icon}
+                            {item.title}
+                          </MenuItem>
+                        );
+                      })}
+                      <MenuItem onClick={handleLogout}>
+                        <LogoutOutlinedIcon />
+                        Đăng xuất
+                      </MenuItem>
                     </StyledMenu>
                   </Grid>
                   <Grid item>

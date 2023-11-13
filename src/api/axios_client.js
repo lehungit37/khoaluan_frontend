@@ -5,12 +5,12 @@ import Cookies from "js-cookie";
 let userToken = "";
 let source = axios.CancelToken.source();
 const axiosClient = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "http://localhost:9000/api",
   headers: {
-    "Content-Type": "application/json;charset=utf-8"
+    "Content-Type": "application/json;charset=utf-8",
     // Authorization: Cookies.get("token")
   },
-  paramsSerializer: (params) => queryString.stringify(params)
+  paramsSerializer: (params) => queryString.stringify(params),
 });
 
 axiosClient.interceptors.request.use(async (config) => {
